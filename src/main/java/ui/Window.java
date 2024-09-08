@@ -17,7 +17,7 @@ public class Window extends JFrame implements ActionListener{
 	{
 		setDefaultLookAndFeelDecorated(true);
 		Menu menu = new Menu();
-		Screen screen = new Screen();
+		Screen screen = menu.getScreen();
 		setJMenuBar(menu.getMenuBar());
 		add(screen);
 		pack();
