@@ -10,6 +10,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JComboBox;
@@ -39,9 +40,12 @@ public class Menu extends JPanel implements ActionListener, ItemListener, Proper
 	private PrefabActionListener preActList = new PrefabActionListener();
 	private List<Item> square = new ArrayList<Item>();
 	private List<Item> circle = new ArrayList<Item>();
+	private JPanel span;
+	private JPanel cpan;
 	public Menu() throws IOException
 	{
 		screen = new Screen();
+		popups();
 		menuBar = new JMenuBar();
 		menu = new JMenu("File");
 		menuBar.add(menu);
@@ -88,6 +92,7 @@ public class Menu extends JPanel implements ActionListener, ItemListener, Proper
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		String s = e.getActionCommand();
+		GridBagConstraints con = new GridBagConstraints();
 		switch(s)
 		{
 			case "Chair":
@@ -99,6 +104,14 @@ public class Menu extends JPanel implements ActionListener, ItemListener, Proper
 				break;
 			case "6 foot round":
 				break;
+			case "New":
+				break;
+			case "Save":
+				break;
+			case "Load":
+				break;
+			default:
+				break;
 		}
 	}
 	
@@ -107,81 +120,102 @@ public class Menu extends JPanel implements ActionListener, ItemListener, Proper
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		// TODO Auto-generated method stub
+		GridBagConstraints con = new GridBagConstraints();
+		con.gridy = 1;
+		if(e.getStateChange() == ItemEvent.SELECTED)
+		{
+			if(e.getItem().equals("Square"))
+			{
+				yub.add(span, con);
+				yub.remove(cpan);
+			}
+			else if(e.getItem().equals("Circle"))
+			{
+				yub.add(cpan, con);
+				yub.remove(span);
+			}
+		}
+		yub.pack();
+	}
 	
+	public void loadItem(Item item)
+	{
+		
+	}
 	public void createItem()
 	{
 		yub = new JFrame("Item");
 		GridBagConstraints con = new GridBagConstraints();
 		yub.setLayout(new GridBagLayout());
 		con.fill = GridBagConstraints.HORIZONTAL;
-		JComboBox<String> options = new JComboBox<>(new String[] {"Square", "Circle"});
+		JComboBox<String> options = new JComboBox<>(new String[] {"Select Option", "Square", "Circle"});
 		options.addItemListener(this);
 		yub.add(options, con);
-		if(options.getSelectedItem().equals("Square"))
-		{
-			JLabel lenLabel = new JLabel("Length: ");
-			JLabel widLabel = new JLabel("Width: ");
-			JLabel ft = new JLabel("FT");
-			JLabel in = new JLabel("IN");
-			JTextField lenft = new JTextField(5);
-			JTextField lenin = new JTextField(5);
-			JTextField widft = new JTextField(5);
-			JTextField widin = new JTextField(5);
-			con.gridy = 1;
-			yub.add(lenLabel, con);
-			con.gridx = 1;
-			yub.add(lenft, con);
-			con.gridx = 2;
-			yub.add(new JLabel("FT"), con);
-			con.gridx = 3;
-			yub.add(lenin, con);
-			con.gridx = 4;
-			yub.add(new JLabel("IN"), con);
-			con.gridx = 0;
-			con.gridy = 2;
-			yub.add(widLabel, con);
-			con.gridx = 1;
-			yub.add(widft, con);
-			con.gridx = 2;
-			yub.add(ft, con);
-			con.gridx = 3;
-			yub.add(widin, con);
-			con.gridx = 4;
-			yub.add(in, con);
-		}
-		else if(options.getSelectedItem().equals("Circle"))
-		{
-			JTextField ft = new JTextField(5);
-			JTextField in = new JTextField(5);
-			con.gridy = 1;
-			yub.add(ft, con);
-			con.gridx = 1;
-			yub.add(new JLabel("Radius: "), con);
-			con.gridx = 2;
-			yub.add(new JLabel("FT"), con);
-			con.gridx = 3;
-			yub.add(in, con);
-			con.gridx = 4;
-			yub.add(new JLabel("IN"), con);
-		}
 		yub.pack();
 		yub.setVisible(true);
 		yub.setLocationRelativeTo(null);
 	}
 	
+	public void popups()
+	{
+		GridBagConstraints con = new GridBagConstraints();
+		span = new JPanel();
+		cpan = new JPanel();
+		span.setLayout(new GridBagLayout());
+		cpan.setLayout(new GridBagLayout());
+		JLabel lenLabel = new JLabel("Length: ");
+		JLabel widLabel = new JLabel("Width: ");
+		JLabel ft = new JLabel("FT");
+		JLabel in = new JLabel("IN");
+		JTextField lenft = new JTextField(5);
+		JTextField lenin = new JTextField(5);
+		JTextField widft = new JTextField(5);
+		JTextField widin = new JTextField(5);
+		con.gridy = 1;
+		span.add(lenLabel, con);
+		con.gridx = 1;
+		span.add(lenft, con);
+		con.gridx = 2;
+		span.add(new JLabel("FT"), con);
+		con.gridx = 3;
+		span.add(lenin, con);
+		con.gridx = 4;
+		span.add(new JLabel("IN"), con);
+		con.gridx = 0;
+		con.gridy = 2;
+		span.add(widLabel, con);
+		con.gridx = 1;
+		span.add(widft, con);
+		con.gridx = 2;
+		span.add(ft, con);
+		con.gridx = 3;
+		span.add(widin, con);
+		con.gridx = 4;
+		span.add(in, con);
+		JTextField cft = new JTextField(5);
+		JTextField cin = new JTextField(5);
+		con.gridx = 1;
+		con.gridy = 1;
+		cpan.add(cft, con);
+		con.gridx = 0;
+		cpan.add(new JLabel("Radius: "), con);
+		con.gridx = 2;
+		cpan.add(new JLabel("FT"), con);
+		con.gridx = 3;
+		cpan.add(cin, con);
+		con.gridx = 4;
+		cpan.add(new JLabel("IN"), con);
+	}
 	public void setScreen(Screen screen)
 	{
 		this.screen = screen;
-	}
-	
+	}	
 	public Screen getScreen()
 	{
 		return this.screen;
-	}
-	@Override
-	public void itemStateChanged(ItemEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 	public JMenuBar getMenuBar()
 	{

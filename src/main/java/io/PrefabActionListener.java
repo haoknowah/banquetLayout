@@ -11,7 +11,12 @@ public class PrefabActionListener implements ActionListener {
 		String s = e.getActionCommand();
 		switch(s)
 		{
-			
+			case "New":
+				break;
+			case "Load":
+				break;
+			case "Edit Existing":
+				break;
 		}
 	}
 
