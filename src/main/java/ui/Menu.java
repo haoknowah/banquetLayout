@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JButton;
@@ -37,16 +36,20 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 	JMenuItem menuItem;
 	private Screen screen;
 	private JFrame yub;
-	private PrefabActionListener preActList = new PrefabActionListener();
-	private ItemActionListener itmActList = new ItemActionListener();
-	private Set<Item> square = itmActList.getSquare();
-	private Set<Item> circle = itmActList.getCircle();
+	private PrefabActionListener preActList;
+	private ItemActionListener itmActList;
+	private Set<Item> square;
+	private Set<Item> circle;
 	private JPanel span;
 	private JPanel cpan;
 	private JTextField name;
 	public Menu() throws IOException
 	{
 		screen = new Screen();
+		preActList = new PrefabActionListener();
+		itmActList = new ItemActionListener();
+		this.square = itmActList.getSquare();
+		this.circle = itmActList.getCircle();
 		popups();
 		menuBar = new JMenuBar();
 		menu = new JMenu("File");
@@ -102,7 +105,6 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		String s = e.getActionCommand();
-		GridBagConstraints con = new GridBagConstraints();
 		Item item;
 		switch(s)
 		{
@@ -117,6 +119,7 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 				break;
 			case "Create Item":
 				item = constructItem();
+				screen.addObject(item);
 				break;
 			case "Save Item":
 				saveNameMenu();
@@ -136,7 +139,6 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 	}
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		// TODO Auto-generated method stub
 		GridBagConstraints con = new GridBagConstraints();
 		con.gridy = 1;
 		if(e.getStateChange() == ItemEvent.SELECTED)
@@ -206,22 +208,22 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 	{
 		span = new JPanel();
 		span.setLayout(new GridBagLayout());
-		JLabel lenLabel = new JLabel("Length: ");
+		JLabel heiLabel = new JLabel("Height: ");
 		JLabel widLabel = new JLabel("Width: ");
 		JLabel ft = new JLabel("FT");
 		JLabel in = new JLabel("IN");
-		JTextField lenft = new JTextField(5);
-		JTextField lenin = new JTextField(5);
+		JTextField heift = new JTextField(5);
+		JTextField heiin = new JTextField(5);
 		JTextField widft = new JTextField(5);
 		JTextField widin = new JTextField(5);
 		con.gridy = 1;
-		span.add(lenLabel, con);
+		span.add(heiLabel, con);
 		con.gridx = 1;
-		span.add(lenft, con);
+		span.add(heift, con);
 		con.gridx = 2;
 		span.add(new JLabel("FT"), con);
 		con.gridx = 3;
-		span.add(lenin, con);
+		span.add(heiin, con);
 		con.gridx = 4;
 		span.add(new JLabel("IN"), con);
 		con.gridx = 0;
@@ -280,13 +282,37 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 		if(yub.getContentPane().getComponent(1) == span)
 		{
 			Component[] com = span.getComponents();
+			if(((JTextField) com[1]).getText().equals(""))
+			{
+				((JTextField) com[1]).setText("0");
+			}
+			if(((JTextField) com[3]).getText().equals(""))
+			{
+				((JTextField) com[3]).setText("0");
+			}
+			if(((JTextField) com[6]).getText().equals(""))
+			{
+				((JTextField) com[6]).setText("0");
+			}
+			if(((JTextField) com[8]).getText().equals(""))
+			{
+				((JTextField) com[8]).setText("0");
+			}
 			item = new Item(Double.parseDouble(((JTextField) com[1]).getText()), Double.parseDouble(((JTextField) com[3]).getText()),
 					Double.parseDouble(((JTextField) com[6]).getText()), Double.parseDouble(((JTextField) com[8]).getText()));
 		}
 		else if(yub.getContentPane().getComponent(1) == cpan)
 		{
 			Component[] com = cpan.getComponents();
-			item = new Item(Double.parseDouble(((JTextField) com[1]).getText()), Double.parseDouble(((JTextField) com[3]).getText()));
+			if(((JTextField) com[0]).getText().equals(""))
+			{
+				((JTextField) com[0]).setText("0");
+			}
+			if(((JTextField) com[3]).getText().equals(""))
+			{
+				((JTextField) com[3]).setText("0");
+			}
+			item = new Item(Double.parseDouble(((JTextField) com[0]).getText()), Double.parseDouble(((JTextField) com[3]).getText()));
 		}
 		else
 		{

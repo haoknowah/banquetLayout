@@ -12,7 +12,8 @@ public class ItemActionListener implements ActionListener{
 	private Set<Item> circle;
 	public ItemActionListener()
 	{
-		
+		square = Save.getSquare();
+		circle = Save.getCircle();
 	}
 	public Set<Item> getSquare() {
 		return square;

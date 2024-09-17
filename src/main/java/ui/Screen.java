@@ -6,12 +6,9 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,23 +24,12 @@ public class Screen extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	private List<Item> objects;
 	private Image img;
-	public Screen() throws IOException
+	private MouseHandler m;
+	public Screen()
 	{
 		objects = new ArrayList<Item>();
 		setPreferredSize(new Dimension(1800, 500));
-		BufferedImage img = ImageIO.read(new File(System.getProperty("user.dir") + "/batman beyond.jpg"));
-		Item item = new Item();
-		item.setImg(img);
-		JLabel lab = new JLabel(item.getImg());
-		lab.setSize(500, 300);
-		lab.setPreferredSize(new Dimension(500, 300));
-		MouseHandler m = new MouseHandler();
-		item.addMouseListener(m);
-		item.addMouseMotionListener(m);
-		lab.addMouseListener(m);
-		lab.addMouseMotionListener(m);
-		add(lab);
-		add(item);
+		m = new MouseHandler();
 	}
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -58,6 +44,10 @@ public class Screen extends JPanel implements ActionListener{
 	public void addObject(Item item)
 	{
 		objects.add(item);
+		JLabel lab = new JLabel(item.getImg());
+		lab.addMouseListener(m);
+		lab.addMouseMotionListener(m);
+		add(lab);
 	}
 	public List<Item> getObjects()
 	{
