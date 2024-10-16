@@ -10,6 +10,7 @@ import ui.Window;
 public class Meow {
 	public static void main(String[] args) throws IOException
 	{
+		Tester tester = new Tester();
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
@@ -18,7 +19,7 @@ public class Meow {
 				Window win;
 				try {
 					win = new Window();
-					win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					//win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

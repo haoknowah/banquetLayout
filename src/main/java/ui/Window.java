@@ -1,10 +1,15 @@
 package ui;
 
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
 
 public class Window extends JFrame implements ActionListener{
 
@@ -12,13 +17,14 @@ public class Window extends JFrame implements ActionListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private Menu menu;
+	public Screen screen;
 	public Window() throws IOException
 	{
 		setDefaultLookAndFeelDecorated(true);
-		Menu menu = new Menu();
-		Screen screen = menu.getScreen();
-		setJMenuBar(menu.getMenuBar());
-		add(screen);
+		menu = new Menu(this);
+		JMenuBar menuBar = menu.getMenuBar();
+		setJMenuBar(menuBar);
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -28,5 +34,16 @@ public class Window extends JFrame implements ActionListener{
 		// TODO Auto-generated method stub
 		
 	}
-
+	public void addScreen(Screen screen)
+	{
+		this.screen = screen;
+		add(screen);
+		pack();
+	}
+	@Override
+	public void paintComponents(Graphics g)
+	{
+		this.screen = this.menu.getScreen();
+		super.paintComponents(g);
+	}
 }

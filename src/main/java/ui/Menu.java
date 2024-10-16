@@ -1,15 +1,19 @@
 package ui;
 
 import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -34,6 +38,7 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 	JMenuBar menuBar;
 	JMenu menu, submenu;
 	JMenuItem menuItem;
+	private Window window;
 	private Screen screen;
 	private JFrame yub;
 	private PrefabActionListener preActList;
@@ -43,9 +48,9 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 	private JPanel span;
 	private JPanel cpan;
 	private JTextField name;
-	public Menu() throws IOException
+	public Menu(Window window) throws IOException
 	{
-		screen = new Screen();
+		this.window = window;
 		preActList = new PrefabActionListener();
 		itmActList = new ItemActionListener();
 		this.square = itmActList.getSquare();
@@ -102,6 +107,20 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 		menu.add(menuItem);
 		
 	}
+	@Override
+	public void paintComponent(Graphics g)
+	{
+		System.out.println("A");
+		this.screen = this.window.screen;
+		this.screen.revalidate();
+		this.screen.repaint();
+		super.paintComponent(g);
+	}
+	@Override
+	public void paintComponents(Graphics g)
+	{
+		super.paintComponents(g);
+	}
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		String s = e.getActionCommand();
@@ -112,6 +131,11 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 				createItem();
 				break;
 			case "New":
+				this.screen = new Screen();
+				this.window.addScreen(this.screen);
+				this.window.pack();
+				this.window.revalidate();
+				this.window.repaint();
 				break;
 			case "Save":
 				break;
@@ -120,6 +144,8 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 			case "Create Item":
 				item = constructItem();
 				screen.addObject(item);
+				screen.revalidate();
+				screen.repaint();
 				break;
 			case "Save Item":
 				saveNameMenu();
@@ -353,7 +379,7 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 			else
 			{
 				Component[] com = span.getComponents();
-				span.add(new Item(Double.parseDouble(((JTextField) com[1]).getText()), Double.parseDouble(((JTextField) com[3]).getText()),
+				square.add(new Item(Double.parseDouble(((JTextField) com[1]).getText()), Double.parseDouble(((JTextField) com[3]).getText()),
 						Double.parseDouble(((JTextField) com[6]).getText()), Double.parseDouble(((JTextField) com[8]).getText())));
 			}
 		}
@@ -382,7 +408,7 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 			else
 			{
 				Component[] com = cpan.getComponents();
-				span.add(new Item(Double.parseDouble(((JTextField) com[1]).getText()), Double.parseDouble(((JTextField) com[3]).getText()),
+				circle.add(new Item(Double.parseDouble(((JTextField) com[1]).getText()), Double.parseDouble(((JTextField) com[3]).getText()),
 						Double.parseDouble(((JTextField) com[6]).getText()), Double.parseDouble(((JTextField) com[8]).getText())));
 			}
 		}
@@ -409,4 +435,6 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 	{
 		return menuBar;
 	}
+	
 }
+
