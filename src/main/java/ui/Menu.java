@@ -8,12 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -28,6 +25,7 @@ import javax.swing.JTextField;
 import Object.Item;
 import io.ItemActionListener;
 import io.PrefabActionListener;
+import io.Save;
 
 public class Menu extends JPanel implements ActionListener, ItemListener{
 
@@ -66,6 +64,9 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 		menuItem = new JMenuItem("Load");
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+		menuItem = new JMenuItem("Publish");
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 		
@@ -110,7 +111,6 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 	@Override
 	public void paintComponent(Graphics g)
 	{
-		System.out.println("A");
 		this.screen = this.window.screen;
 		this.screen.revalidate();
 		this.screen.repaint();
@@ -138,8 +138,17 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 				this.window.repaint();
 				break;
 			case "Save":
+				Save.saveFile(screen);
 				break;
 			case "Load":
+				this.screen = Save.loadFile();
+				this.window.addScreen(screen);
+				this.window.pack();
+				this.window.revalidate();
+				this.window.repaint();
+				break;
+			case "Publish":
+				Save.publish(screen);
 				break;
 			case "Create Item":
 				item = constructItem();
@@ -157,7 +166,22 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 				break;
 			case "Enter":
 				String name = this.name.getText();
-				findDup(name);
+				boolean newItem = findDup(name);
+				if(newItem)
+				{
+					item = constructItem();
+					item.setName(name);
+					if(item.getType() == Item.SQUARE)
+					{
+						square.add(item);
+						Save.updateSquare(square);
+					}
+					if(item.getType() == Item.CIRCLE)
+					{
+						circle.add(item);
+						Save.updateCircle(circle);
+					}
+				}
 				break;
 			default:
 				break;
@@ -212,14 +236,20 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 	public void saveNameMenu()
 	{
 		JFrame nam = new JFrame("Name");
+		nam.setLayout(new GridBagLayout());
+		GridBagConstraints con = new GridBagConstraints();
 		JLabel label = new JLabel("Name: ");
-		name = new JTextField(20);
+		name = new JTextField(30);
 		JButton button = new JButton("Enter");
 		button.addActionListener(this);
 		button.addActionListener(c -> {yub.dispose(); nam.dispose();});
-		nam.add(label);
-		nam.add(name);
-		nam.add(button);
+		nam.add(label, con);
+		con.gridx = 1;
+		nam.add(name, con);
+		con.gridy = 1;
+		con.gridx = 0;
+		con.gridwidth = 2;
+		nam.add(button, con);
 		nam.pack();
 		nam.setLocationRelativeTo(null);
 		nam.setVisible(true);
@@ -284,7 +314,7 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 		con.gridy = 1;
 		cpan.add(cft, con);
 		con.gridx = 0;
-		cpan.add(new JLabel("Radius: "), con);
+		cpan.add(new JLabel("Diameter: "), con);
 		con.gridx = 2;
 		cpan.add(new JLabel("FT"), con);
 		con.gridx = 3;
@@ -351,26 +381,29 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 	{
 		
 	}
-	public void findDup(String name)
+	public boolean findDup(String name)
 	{
-		boolean x = false;
+		boolean x = true;
 		if(yub.getContentPane().getComponent(1) == span)
 		{
 			for(Item i : square)
 			{
 				if(i.getName().equals(name))
 				{
-					x = true;
+					x = false;
 				}
 			}
-			if(x)
+			if(x == false)
 			{
 				JFrame f = new JFrame();
+				f.setLayout(new GridBagLayout());
+				GridBagConstraints con = new GridBagConstraints();
 				JLabel label = new JLabel("Name is already in use.");
 				JButton button = new JButton("Close");
 				button.addActionListener(c -> {f.dispose();});
-				f.add(label);
-				f.add(button);
+				f.add(label, con);
+				con.gridy = 1;
+				f.add(button, con);
 				f.pack();
 				f.setVisible(true);
 				f.setLocationRelativeTo(null);
@@ -378,9 +411,7 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 			}
 			else
 			{
-				Component[] com = span.getComponents();
-				square.add(new Item(Double.parseDouble(((JTextField) com[1]).getText()), Double.parseDouble(((JTextField) com[3]).getText()),
-						Double.parseDouble(((JTextField) com[6]).getText()), Double.parseDouble(((JTextField) com[8]).getText())));
+				square.add(constructItem());
 			}
 		}
 		else if(yub.getContentPane().getComponent(1) == cpan)
@@ -389,10 +420,10 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 			{
 				if(i.getName().equals(name))
 				{
-					x = true;
+					x = false;
 				}
 			}
-			if(x)
+			if(x == false)
 			{
 				JFrame f = new JFrame();
 				JLabel label = new JLabel("Name is already in use.");
@@ -407,11 +438,10 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 			}
 			else
 			{
-				Component[] com = cpan.getComponents();
-				circle.add(new Item(Double.parseDouble(((JTextField) com[1]).getText()), Double.parseDouble(((JTextField) com[3]).getText()),
-						Double.parseDouble(((JTextField) com[6]).getText()), Double.parseDouble(((JTextField) com[8]).getText())));
+				circle.add(constructItem());
 			}
 		}
+		return x;
 	}
 	public void removeItem()
 	{

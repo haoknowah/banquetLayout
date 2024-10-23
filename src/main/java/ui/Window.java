@@ -1,9 +1,7 @@
 package ui;
 
+import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -21,6 +19,7 @@ public class Window extends JFrame implements ActionListener{
 	public Screen screen;
 	public Window() throws IOException
 	{
+		this.setBackground(Color.white);
 		setDefaultLookAndFeelDecorated(true);
 		menu = new Menu(this);
 		JMenuBar menuBar = menu.getMenuBar();

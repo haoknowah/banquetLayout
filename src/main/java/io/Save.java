@@ -1,70 +1,184 @@
 package io;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OptionalDataException;
 import java.io.Writer;
-import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import Object.Item;
+import ui.Screen;
 
 public class Save {
-	private static final Type FILE_TYPE = new TypeToken<Set<Item>>() {}.getType();
 	public static Set<Item> getSquare()
 	{
-		File file = new File(System.getProperty("user.dir") + "/square.json");
-		Gson gson = new Gson();
 		try
 		{
-			Reader reader = new FileReader(file);
-			Set<Item> square = gson.fromJson(reader, FILE_TYPE);
-			if(square == null)
+			File file = new File(System.getProperty("user.dir") + "/square.txt");
+			FileInputStream fi = new FileInputStream(file);
+			ObjectInputStream is = new ObjectInputStream(fi);
+			int items = is.readInt();
+			Set<Item> square = new HashSet<Item>();
+			for(int i = 0; i < items; i++)
 			{
-				square = new HashSet<Item>();
+				Item object = (Item) is.readObject();
+				object.setImg();
+				square.add(object);
 			}
+			is.close();
+			fi.close();
 			return square;
+		}
+		catch(OptionalDataException e)
+		{
+			System.out.println(e.eof);
+			e.printStackTrace();
+			return null;
+		}
+		catch(FileNotFoundException e)
+		{
+			try {
+				Writer writer = new FileWriter("square.txt");
+				writer.flush();
+				writer.close();
+				return new HashSet<Item>();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				return new HashSet<Item>();
+			}
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			return null;
+			try {
+				Writer writer = new FileWriter("square.txt");
+				writer.flush();
+				writer.close();
+				return new HashSet<Item>();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				return new HashSet<Item>();
+			}
 		}
 	}
 	public static Set<Item> getCircle()
 	{
-		File file = new File(System.getProperty("user.dir") + "/circle.json");
-		Gson gson = new Gson();
 		try
 		{
-			Reader reader = new FileReader(file);
-			Set<Item> circle = gson.fromJson(reader, FILE_TYPE);
-			if(circle == null)
+			File file = new File(System.getProperty("user.dir") + "/circle.txt");
+			FileInputStream fi = new FileInputStream(file);
+			ObjectInputStream is = new ObjectInputStream(fi);
+			int items = is.readInt();
+			Set<Item> circle = new HashSet<Item>();
+			for(int i = 0; i < items; i++)
 			{
-				circle = new HashSet<Item>();
+				Item object = (Item) is.readObject();
+				object.setImg();
+				circle.add(object);
 			}
+			is.close();
+			fi.close();
 			return circle;
+		}
+		catch(OptionalDataException e)
+		{
+			System.out.println(e.eof);
+			e.printStackTrace();
+			return null;
+		}
+		catch(FileNotFoundException e)
+		{
+			try {
+				Writer writer = new FileWriter("circle.txt");
+				writer.flush();
+				writer.close();
+				return new HashSet<Item>();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				return new HashSet<Item>();
+			}
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			return null;
+			try {
+				Writer writer = new FileWriter("circle.txt");
+				writer.flush();
+				writer.close();
+				return new HashSet<Item>();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				return new HashSet<Item>();
+			}
 		}
 	}
-	public static void saveFile()
+	public static void updateSquare(Set<Item> square)
+	{
+		try
+		{
+			FileOutputStream fo = new FileOutputStream(System.getProperty("user.dir") + "/square.txt");
+			ObjectOutputStream os = new ObjectOutputStream(fo);
+			os.writeInt(square.size());
+			for(Item i : square)
+			{
+				i.removeImage();
+				os.writeObject(i);
+			}
+			os.close();
+			fo.close();
+			for(Item i : square)
+			{
+				i.setImg();
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	public static void updateCircle(Set<Item> circle)
+	{
+		try
+		{
+			FileOutputStream fo = new FileOutputStream(System.getProperty("user.dir") + "/circle.txt");
+			ObjectOutputStream os = new ObjectOutputStream(fo);
+			os.writeInt(circle.size());
+			for(Item i : circle)
+			{
+				i.removeImage();
+				os.writeObject(i);
+			}
+			os.close();
+			fo.close();
+			for(Item i : circle)
+			{
+				i.setImg();
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	public static void saveFile(Screen screen)
 	{
 		JFileChooser find = new JFileChooser();
 		find.setCurrentDirectory(new File(System.getProperty("user.dir")));
@@ -73,10 +187,10 @@ public class Save {
 		{
 			find.approveSelection();
 			try {
-				Writer write = new FileWriter(find.getSelectedFile().getPath() + ".svg");
+				Writer write = new FileWriter(find.getSelectedFile().getPath() + ".txt");
 				write.flush();
 				write.close();
-				find.setSelectedFile(new File(find.getSelectedFile().getPath() + ".svg"));
+				find.setSelectedFile(new File(find.getSelectedFile().getPath() + ".txt"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -84,10 +198,31 @@ public class Save {
 		if(JFileChooser.APPROVE_OPTION == result)
 		{
 			File file = find.getSelectedFile();
-			//implement save funtionality
+			try
+			{
+				FileOutputStream fo = new FileOutputStream(file);
+				ObjectOutputStream os = new ObjectOutputStream(fo);
+				os.writeObject(screen.backFile.getAbsolutePath());
+				os.writeInt(screen.getObjects().size());
+				for(Item i : screen.getObjects())
+				{
+					i.removeImage();
+					os.writeObject(i);
+				}
+				os.close();
+				fo.close();
+				for(Item i : screen.getObjects())
+				{
+					i.setImg();
+				}
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
-	public static File loadFile()
+	public static Screen loadFile()
 	{
 		JFileChooser find = new JFileChooser();
 		find.setCurrentDirectory(new File(System.getProperty("user.dir")));
@@ -96,10 +231,10 @@ public class Save {
 		{
 			find.approveSelection();
 			try {
-				Writer write = new FileWriter(find.getSelectedFile().getPath() + ".svg");
+				Writer write = new FileWriter(find.getSelectedFile().getPath() + ".txt");
 				write.flush();
 				write.close();
-				find.setSelectedFile(new File(find.getSelectedFile().getPath() + ".svg"));
+				find.setSelectedFile(new File(find.getSelectedFile().getPath() + ".txt"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -107,7 +242,34 @@ public class Save {
 		if(JFileChooser.APPROVE_OPTION == result)
 		{
 			File file = find.getSelectedFile();
-			return file;
+			try
+			{
+				FileInputStream fi = new FileInputStream(file);
+				ObjectInputStream is = new ObjectInputStream(fi);
+				File backFile = new File((String) is.readObject());
+				Screen screen = new Screen(backFile);
+				int items = is.readInt();
+				for(int i = 0; i < items; i++)
+				{
+					Item object = (Item) is.readObject();
+					object.setImg();
+					screen.addObject(object);
+				}
+				is.close();
+				fi.close();
+				return screen;
+			}
+			catch(OptionalDataException e)
+			{
+				System.out.println(e.eof);
+				e.printStackTrace();
+				return null;
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				return null;
+			}
 		}
 		else
 		{
@@ -118,6 +280,39 @@ public class Save {
 			f.setLocationRelativeTo(null);
 			f.setVisible(true);
 			return null;
+		}
+	}
+	public static void publish(Screen screen)
+	{
+		JFileChooser find = new JFileChooser();
+		find.setCurrentDirectory(new File(System.getProperty("user.dir")));
+		int result = find.showSaveDialog(find);
+		if(find.getSelectedFile().exists() == false)
+		{
+			find.approveSelection();
+			try {
+				Writer write = new FileWriter(find.getSelectedFile().getPath() + ".png");
+				write.flush();
+				write.close();
+				find.setSelectedFile(new File(find.getSelectedFile().getPath() + ".png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if(JFileChooser.APPROVE_OPTION == result)
+		{
+			File file = find.getSelectedFile();
+			try
+			{
+				BufferedImage image = new BufferedImage(screen.getWidth(), screen.getHeight(), BufferedImage.TYPE_INT_RGB);
+				Graphics g = image.createGraphics();
+				screen.paint(g);
+				ImageIO.write(image, "png", file);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 }

@@ -1,25 +1,26 @@
 package Object;
 
-import java.awt.BasicStroke;
+
+import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
+public class Item implements Serializable{
 
-public class Item{
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7992484780027516800L;
 	/**
 	 * 
 	 */
 	private BufferedImage img;
 	private double height;
 	private double width;
-	private double radius;
+	private double diameter;
 	public final double SCALE = 1/35;
 	private int type;
 	public static final int SQUARE = 1;
@@ -37,13 +38,27 @@ public class Item{
 		this.type = SQUARE;
 		setImg();
 	}
+	public Item(double heightft, double heightin, double widthft, double widthin, Point point)
+	{
+		this.height = heightft * 12 + heightin;
+		this.width = widthft * 12 + widthin;
+		this.type = SQUARE;
+		this.moveToPoint(point);
+		setImg();
+	}
 	public Item(double radiusft, double radiusin)
 	{
-		this.radius = radiusft * 12 + radiusin;
+		this.diameter = radiusft * 12 + radiusin;
 		this.type = CIRCLE;
 		setImg();
 	}
-	
+	public Item(double radiusft, double radiusin, Point point)
+	{
+		this.diameter = radiusft * 12 + radiusin;
+		this.type = CIRCLE;
+		this.moveToPoint(point);
+		setImg();
+	}
 	public void setLength(double length)
 	{
 		this.height = length;
@@ -52,14 +67,23 @@ public class Item{
 	{
 		return this.name;
 	}
+	public void setName(String name)
+	{
+		this.name = name;
+	}
 	public void setWidth(double width)
 	{
 		this.width = width;
 	}
 	
-	public void setRadius(double radius)
+	public void setDiameter(double radius)
 	{
-		this.radius = radius;
+		this.diameter = radius;
+	}
+	
+	public int getType()
+	{
+		return this.type;
 	}
 	
 	public double getItemHeight()
@@ -72,9 +96,9 @@ public class Item{
 		return this.width;
 	}
 	
-	public double getRadius()
+	public double getDiameter()
 	{
-		return this.radius;
+		return this.diameter;
 	}
 	public Point getLocation()
 	{
@@ -95,15 +119,22 @@ public class Item{
 		if(type == 1)
 		{
 			icon = new BufferedImage((int) width, (int) height, BufferedImage.TYPE_INT_RGB);
-			Graphics g = icon.createGraphics();
+			Graphics2D g = icon.createGraphics();
+			g.setColor(Color.yellow);
+			g.fillRect(0, 0, (int) this.width-1, (int) this.height-1);
+			g.setColor(Color.BLACK);
 			g.drawRect(0, 0, (int) this.width, (int) this.height);
 			g.dispose();
 		}
 		else if(type == 2)
 		{
-			icon = new BufferedImage((int) radius, (int) radius, BufferedImage.TYPE_INT_RGB);
-			Graphics g = icon.createGraphics();
-			g.drawOval(0, 0, (int) this.radius/2, (int) this.radius/2);
+			icon = new BufferedImage((int) diameter+5, (int) diameter+5, BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g = icon.createGraphics();
+			g.setComposite(AlphaComposite.Src);
+			g.setColor(Color.yellow);
+			g.fillOval(0, 0, (int) this.diameter, (int) this.diameter);
+			g.setColor(Color.red);
+			g.drawOval(0, 0, (int) this.diameter, (int) this.diameter);
 			g.dispose();
 		}
 		else
@@ -111,5 +142,9 @@ public class Item{
 			icon = null;
 		}
 		this.img = icon;
+	}
+	public void removeImage()
+	{
+		this.img = null;
 	}
 }
