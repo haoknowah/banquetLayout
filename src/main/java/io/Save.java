@@ -21,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import Object.Item;
+import ui.PrefabScreen;
 import ui.Screen;
 
 public class Save {
@@ -221,6 +222,10 @@ public class Save {
 				e.printStackTrace();
 			}
 		}
+	}
+	public static void saveFile(PrefabScreen screen)
+	{
+		
 	}
 	public static Screen loadFile()
 	{
