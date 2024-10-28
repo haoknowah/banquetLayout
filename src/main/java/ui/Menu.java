@@ -49,7 +49,7 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 	public Menu(Window window) throws IOException
 	{
 		this.window = window;
-		preActList = new PrefabActionListener();
+		preActList = new PrefabActionListener(this);
 		itmActList = new ItemActionListener();
 		this.square = itmActList.getSquare();
 		this.circle = itmActList.getCircle();
@@ -103,7 +103,7 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 		menuItem = new JMenuItem("Load");
 		menuItem.addActionListener(preActList);
 		menu.add(menuItem);
-		menuItem = new JMenuItem("Edit Exisisting");
+		menuItem = new JMenuItem("Edit Existing");
 		menuItem.addActionListener(preActList);
 		menu.add(menuItem);
 		

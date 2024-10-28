@@ -13,6 +13,7 @@ import java.util.Optional;
 import javax.swing.JPanel;
 
 import Object.Item;
+import Object.Prefab;
 
 public class PrefabScreen extends JPanel{
 
@@ -31,7 +32,13 @@ public class PrefabScreen extends JPanel{
 		objects = new ArrayList<Item>();
 		setPreferredSize(new Dimension(500, 500));
 	}
-
+	public PrefabScreen(Prefab prefab)
+	{
+		enableEvents(
+	            AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK);
+		objects = prefab.getObjects();
+		setPreferredSize(new Dimension(500, 500));
+	}
 	@Override
 	public void paintComponent(Graphics g)
 	{

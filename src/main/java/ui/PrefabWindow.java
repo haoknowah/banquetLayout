@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import Object.Item;
+import Object.Prefab;
 import io.Save;
 
 public class PrefabWindow extends JFrame implements ActionListener, ItemListener{
@@ -40,11 +41,23 @@ public class PrefabWindow extends JFrame implements ActionListener, ItemListener
 		menuItem = new JMenuItem("Save");
 		menuItem.addActionListener(this);
 		menuBar.add(menuItem);
-		menuItem = new JMenuItem("Load");
+		setJMenuBar(menuBar);
+		this.screen = new PrefabScreen();
+		add(this.screen);
+		pack();
+	}
+	public PrefabWindow(Prefab prefab)
+	{
+		JMenuBar menuBar = new JMenuBar();
+		popups();
+		JMenuItem menuItem = new JMenuItem("Add");
+		menuItem.addActionListener(this);
+		menuBar.add(menuItem);
+		menuItem = new JMenuItem("Save");
 		menuItem.addActionListener(this);
 		menuBar.add(menuItem);
 		setJMenuBar(menuBar);
-		this.screen = new PrefabScreen();
+		this.screen = new PrefabScreen(prefab);
 		add(this.screen);
 		pack();
 	}

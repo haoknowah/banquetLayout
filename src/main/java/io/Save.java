@@ -12,7 +12,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OptionalDataException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -21,6 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import Object.Item;
+import Object.Prefab;
 import ui.PrefabScreen;
 import ui.Screen;
 
@@ -225,7 +228,53 @@ public class Save {
 	}
 	public static void saveFile(PrefabScreen screen)
 	{
-		
+		JFileChooser find = new JFileChooser();
+		find.setCurrentDirectory(new File(System.getProperty("user.dir")));
+		int result = find.showSaveDialog(find);
+		if(find.getSelectedFile().exists() == false)
+		{
+			find.approveSelection();
+			try {
+				Writer write = new FileWriter(find.getSelectedFile().getPath() + ".txt");
+				write.flush();
+				write.close();
+				find.setSelectedFile(new File(find.getSelectedFile().getPath() + ".txt"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		File file = find.getSelectedFile();
+		if(JFileChooser.APPROVE_OPTION == result && file.getPath().substring(file.getPath().length()-3).equals("txt"))
+		{
+			try
+			{
+				FileOutputStream fo = new FileOutputStream(file);
+				ObjectOutputStream os = new ObjectOutputStream(fo);
+				os.writeInt(screen.getObjects().size());
+				for(Item i : screen.getObjects())
+				{
+					i.removeImage();
+					os.writeObject(i);
+				}
+				os.close();
+				fo.close();
+				for(Item i : screen.getObjects())
+				{
+					i.setImg();
+				}
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else
+		{
+			JFrame f = new JFrame();
+			f.add(new JLabel("Invalid selection."));
+			f.setVisible(true);
+			f.setLocationRelativeTo(null);
+		}
 	}
 	public static Screen loadFile()
 	{
@@ -263,6 +312,66 @@ public class Save {
 				is.close();
 				fi.close();
 				return screen;
+			}
+			catch(OptionalDataException e)
+			{
+				System.out.println(e.eof);
+				e.printStackTrace();
+				return null;
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				return null;
+			}
+		}
+		else
+		{
+			JFrame f = new JFrame("A");
+			JLabel war = new JLabel("File was not selected or could not be loaded.");
+			f.add(war);
+			f.pack();
+			f.setLocationRelativeTo(null);
+			f.setVisible(true);
+			return null;
+		}
+	}
+	public static Prefab loadPrefab()
+	{
+		JFileChooser find = new JFileChooser();
+		find.setCurrentDirectory(new File(System.getProperty("user.dir")));
+		int result = find.showOpenDialog(find);
+		if(find.getSelectedFile().exists() == false)
+		{
+			find.approveSelection();
+			try {
+				Writer write = new FileWriter(find.getSelectedFile().getPath() + ".txt");
+				write.flush();
+				write.close();
+				find.setSelectedFile(new File(find.getSelectedFile().getPath() + ".txt"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if(JFileChooser.APPROVE_OPTION == result)
+		{
+			File file = find.getSelectedFile();
+			try
+			{
+				FileInputStream fi = new FileInputStream(file);
+				ObjectInputStream is = new ObjectInputStream(fi);
+				List<Item> objects = new ArrayList<Item>();
+				int items = is.readInt();
+				for(int i = 0; i < items; i++)
+				{
+					Item object = (Item) is.readObject();
+					object.setImg();
+					objects.add(object);
+				}
+				Prefab prefab = new Prefab(objects);
+				is.close();
+				fi.close();
+				return prefab;
 			}
 			catch(OptionalDataException e)
 			{
