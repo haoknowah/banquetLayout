@@ -4,16 +4,29 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Set;
 
-import Object.Item;
+import javax.swing.JMenu;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
-public class ItemActionListener implements ActionListener{
+import Object.Item;
+import ui.Menu;
+import ui.Screen;
+
+public class ItemActionListener implements ActionListener, MenuListener{
 
 	private Set<Item> square;
 	private Set<Item> circle;
-	public ItemActionListener()
+	private boolean isSquare = false;
+	private boolean isRound = false;
+	private Screen screen;
+	public ItemActionListener(Menu menu)
 	{
 		square = Save.getSquare();
 		circle = Save.getCircle();
+	}
+	public void setScreen(Screen screen)
+	{
+		this.screen = screen;
 	}
 	public Set<Item> getSquare() {
 		return square;
@@ -29,6 +42,41 @@ public class ItemActionListener implements ActionListener{
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		Item item = null;
+		if(isSquare)
+		{
+			item = (Item) square.stream().filter(x -> x.getName().equalsIgnoreCase(e.getActionCommand())).toArray()[0];
+		}
+		else if(isRound)
+		{
+			item = (Item) circle.stream().filter(x -> x.getName().equalsIgnoreCase(e.getActionCommand())).toArray()[0];
+		}
+		screen.addObject(item);
+		screen.revalidate();
+		screen.repaint();
+	}
+	@Override
+	public void menuSelected(MenuEvent e) {
+		// TODO Auto-generated method stub
+		if(((JMenu) e.getSource()).getName().equalsIgnoreCase("square"))
+		{
+			isSquare = true;
+			isRound = false;
+		}
+		else if(((JMenu) e.getSource()).getName().equalsIgnoreCase("round"))
+		{
+			isRound = true;
+			isSquare = false;
+		}
+	}
+	@Override
+	public void menuDeselected(MenuEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void menuCanceled(MenuEvent e) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -34,7 +34,7 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 	 */
 	private static final long serialVersionUID = 1L;
 	JMenuBar menuBar;
-	JMenu menu, submenu;
+	JMenu menu, submenu, submenu2;
 	JMenuItem menuItem;
 	private Window window;
 	private Screen screen;
@@ -46,11 +46,14 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 	private JPanel span;
 	private JPanel cpan;
 	private JTextField name;
+	private JComboBox<String> options;
+	private boolean isSquare = false;
+	private JTextField scale;
 	public Menu(Window window) throws IOException
 	{
 		this.window = window;
 		preActList = new PrefabActionListener(this);
-		itmActList = new ItemActionListener();
+		itmActList = new ItemActionListener(this);
 		this.square = itmActList.getSquare();
 		this.circle = itmActList.getCircle();
 		popups();
@@ -69,6 +72,9 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 		menuItem = new JMenuItem("Publish");
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
+		menuItem = new JMenuItem("New Room");
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
 		
 		//2nd menu
 		menu = new JMenu("Add");
@@ -80,19 +86,25 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 		submenu = new JMenu("Square");
+		submenu.setName("Square");
 		for(Item i : square)
 		{
 			menuItem = new JMenuItem(i.getName());
 			menuItem.addActionListener(itmActList);
 			submenu.add(menuItem);
 		}
-		submenu = new JMenu("Round");
+		submenu.addMenuListener(itmActList);
+		menu.add(submenu);
+		submenu2 = new JMenu("Round");
+		submenu2.setName("round");
 		for(Item i : circle)
 		{
 			menuItem = new JMenuItem(i.getName());
 			menuItem.addActionListener(itmActList);
-			submenu.add(menuItem);
+			submenu2.add(menuItem);
 		}
+		submenu2.addMenuListener(itmActList);
+		menu.add(submenu2);
 		
 		//3rd menu
 		menu = new JMenu("Prefab");
@@ -131,14 +143,25 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 				createItem();
 				break;
 			case "New":
+				if(this.screen != null)
+				{
+					this.window.removeScreen();
+				}
 				this.screen = new Screen();
 				this.window.addScreen(this.screen);
+				this.itmActList.setScreen(this.screen);
 				this.window.pack();
 				this.window.revalidate();
 				this.window.repaint();
 				break;
 			case "Save":
 				Save.saveFile(screen);
+				break;
+			case "New Room":
+				newRoom();
+				break;
+			case "Create Room":
+				Save.newRoom((double) (1 / ((double) Integer.parseInt(scale.getText()) * 12)));
 				break;
 			case "Load":
 				this.screen = Save.loadFile();
@@ -163,6 +186,33 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 				removeItem();
 				break;
 			case "Remove":
+				String nam = (String) options.getSelectedItem();
+				if(isSquare)
+				{
+					Item i = (Item) square.stream().filter(x -> x.getName().equals(nam)).toArray()[0];
+					square.remove(i);
+					Save.updateSquare(square);
+					submenu.removeAll();
+					for(Item it : square)
+					{
+						menuItem = new JMenuItem(it.getName());
+						menuItem.addActionListener(this);
+						submenu.add(menuItem);
+					}
+				}
+				else
+				{
+					Item i = (Item) circle.stream().filter(x -> x.getName().equals(nam)).toArray()[0];
+					circle.remove(i);
+					Save.updateCircle(circle);
+					submenu2.removeAll();
+					for(Item it : circle)
+					{
+						menuItem = new JMenuItem(it.getName());
+						menuItem.addActionListener(this);
+						submenu2.add(menuItem);
+					}
+				}
 				break;
 			case "Enter":
 				String name = this.name.getText();
@@ -175,11 +225,19 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 					{
 						square.add(item);
 						Save.updateSquare(square);
+						menuItem = new JMenuItem(item.getName());
+						menuItem.addActionListener(this);
+						submenu.add(menuItem);
+						itmActList.setSquare(square);
 					}
 					if(item.getType() == Item.CIRCLE)
 					{
 						circle.add(item);
 						Save.updateCircle(circle);
+						menuItem = new JMenuItem(item.getName());
+						menuItem.addActionListener(this);
+						submenu2.add(menuItem);
+						itmActList.setCircle(circle);
 					}
 				}
 				break;
@@ -190,7 +248,18 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		GridBagConstraints con = new GridBagConstraints();
+		yub.setLayout(new GridBagLayout());
 		con.gridy = 1;
+		JPanel p = new JPanel();
+		p.setLayout(new GridBagLayout());
+		options = new JComboBox<String>();
+		p.add(options, con);
+		JButton remove = new JButton("Remove");
+		remove.addActionListener(this);
+		remove.addActionListener(c -> {yub.dispose();});
+		con.gridy = 2;
+		p.add(remove, con);
+		yub.pack();
 		if(e.getStateChange() == ItemEvent.SELECTED)
 		{
 			if(e.getItem().equals("Square"))
@@ -205,6 +274,26 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 				yub.remove(span);
 				span(con);
 			}
+			else if(e.getItem().equals("SQUARE"))
+			{
+				isSquare = true;
+				yub.add(p, con);
+				options.removeAllItems();
+				for(Item i : square)
+				{
+					options.addItem(i.getName());
+				}
+			}
+			else if(e.getItem().equals("CIRCLE"))
+			{
+				isSquare = false;
+				yub.add(p, con);
+				options.removeAllItems();
+				for(Item i : circle)
+				{
+					options.addItem(i.getName());
+				}
+			}
 			else if(e.getItem().equals("Select Item"))
 			{
 				yub.remove(span);
@@ -216,9 +305,9 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 		yub.pack();
 	}
 	
-	public void loadItem(Item item)
+	public String getSelection()
 	{
-		
+		return (String) options.getSelectedItem();
 	}
 	public void createItem()
 	{
@@ -376,11 +465,7 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 		}
 		return item;
 	}
-	//initialize lists of saved items
-	public void updateLists()
-	{
-		
-	}
+
 	public boolean findDup(String name)
 	{
 		boolean x = true;
@@ -445,13 +530,13 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 	}
 	public void removeItem()
 	{
-		JFrame f = new JFrame("Remove Item From List");
-		JComboBox<String> options = new JComboBox<>(new String[] {"Select Item", "Square", "Circle"});
+		yub = new JFrame("Remove Item From List");
+		JComboBox<String> options = new JComboBox<>(new String[] {"Select Item", "SQUARE", "CIRCLE"});
 		options.addItemListener(this);
-		//add code to listener to change class variable for list here
-		JButton remove = new JButton("Remove");
-		remove.addActionListener(this);
-		remove.addActionListener(c -> {f.dispose();});
+		yub.add(options);
+		yub.pack();
+		yub.setVisible(true);
+		yub.setLocationRelativeTo(null);
 	}
 	public void setScreen(Screen screen)
 	{
@@ -465,6 +550,35 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 	{
 		return menuBar;
 	}
-	
+	public void newRoom()
+	{
+		try
+		{
+			JFrame f = new JFrame();
+			f.setLayout(new GridBagLayout());
+			GridBagConstraints con = new GridBagConstraints();
+			JLabel lab = new JLabel("What is the length of the room's longest side? ");
+			scale = new JTextField(5);
+			JLabel ft = new JLabel("FT");
+			JButton create = new JButton("Create Room");
+			f.add(lab, con);
+			con.gridx = 1;
+			f.add(scale, con);
+			con.gridx = 2;
+			f.add(ft, con);
+			con.gridx = 0;
+			con.gridy = 1;
+			con.gridwidth = 2;
+			create.addActionListener(this);
+			create.addActionListener(c -> {f.dispose();});
+			f.add(create, con);
+			f.pack();
+			f.setVisible(true);
+			f.setLocationRelativeTo(null);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 }
-

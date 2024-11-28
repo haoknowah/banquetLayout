@@ -27,7 +27,7 @@ import Object.Prefab;
 import ui.PrefabScreen;
 import ui.Screen;
 
-public class Save {
+public class Save{
 	public static Set<Item> getSquare()
 	{
 		try
@@ -204,6 +204,7 @@ public class Save {
 			File file = find.getSelectedFile();
 			try
 			{
+				//add code for importing background image
 				FileOutputStream fo = new FileOutputStream(file);
 				ObjectOutputStream os = new ObjectOutputStream(fo);
 				os.writeObject(screen.backFile.getAbsolutePath());
@@ -427,6 +428,32 @@ public class Save {
 			{
 				e.printStackTrace();
 			}
+		}
+	}
+	public static void newRoom(double scale)
+	{
+		JFileChooser find = new JFileChooser();
+		find.setCurrentDirectory(new File(System.getProperty("user.dir")));
+		find.showOpenDialog(find);
+		File file = find.getSelectedFile();
+		JFileChooser save = new JFileChooser();
+		save.setCurrentDirectory(new File(System.getProperty("user.dir")));
+		save.showSaveDialog(save);
+		File room = save.getSelectedFile();
+		try
+		{
+			FileOutputStream fo = new FileOutputStream(room);
+			ObjectOutputStream oo = new ObjectOutputStream(fo);
+			oo.writeDouble(scale);
+			oo.writeObject(file.getAbsolutePath());
+			oo.flush();
+			oo.close();
+			fo.flush();
+			fo.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 }

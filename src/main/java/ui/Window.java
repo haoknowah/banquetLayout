@@ -39,6 +39,11 @@ public class Window extends JFrame implements ActionListener{
 		add(screen);
 		pack();
 	}
+	public void removeScreen()
+	{
+		remove(screen);
+		pack();
+	}
 	@Override
 	public void paintComponents(Graphics g)
 	{

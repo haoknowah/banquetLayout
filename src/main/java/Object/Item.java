@@ -25,7 +25,7 @@ public class Item implements Serializable{
 	private int type;
 	public static final int SQUARE = 1;
 	public static final int CIRCLE = 2;
-	private String name = "a";
+	private String name = "";
 	private final Point location = new Point();
 	public Item()
 	{
@@ -59,9 +59,9 @@ public class Item implements Serializable{
 		this.moveToPoint(point);
 		setImg();
 	}
-	public void setLength(double length)
+	public void setHeight(double height)
 	{
-		this.height = length;
+		this.height = height;
 	}
 	public String getName()
 	{

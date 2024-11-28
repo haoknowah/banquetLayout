@@ -4,23 +4,25 @@ import java.awt.AWTEvent;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import Object.Item;
 
-public class Screen extends JPanel implements ActionListener, Serializable{
+public class Screen extends JPanel implements Serializable{
 
 	/**
 	 * 
@@ -29,19 +31,39 @@ public class Screen extends JPanel implements ActionListener, Serializable{
 	/**
 	 * 
 	 */
-	public File backFile = new File("commodore.png");
+	public File backFile;
 	private List<Item> objects;
 	private BufferedImage background;
 	private Item selectedItem;
 	private Point relativeLocation;
+	private double scale;
+	private PopupMenu popup;
 	public Screen()
 	{
 		enableEvents(
-	            AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK);
+	            AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
 		objects = new ArrayList<Item>();
+		setFocusable(true);
+		requestFocusInWindow();
 		try
 		{
-			this.background = ImageIO.read(new File("commodore.png"));
+			JFileChooser find = new JFileChooser();
+			find.setCurrentDirectory(new File(System.getProperty("user.dir")));
+			find.showOpenDialog(find);
+			backFile = find.getSelectedFile();
+			FileInputStream fi = new FileInputStream(backFile);
+			ObjectInputStream oi = new ObjectInputStream(fi);
+			this.scale = oi.readDouble();
+			String backPath = (String) oi.readObject();
+			this.background = ImageIO.read(new File(backPath));
+			oi.close();
+			fi.close();
+			this.scale = ((double) Math.max(this.background.getHeight(), this.background.getWidth())) * this.scale;
+			//this.scale = ((double) this.background.getWidth()) / ((double) 35 * 12);
+		}
+		catch(NullPointerException e)
+		{
+			e.printStackTrace();
 		}
 		catch(Exception e)
 		{
@@ -52,28 +74,25 @@ public class Screen extends JPanel implements ActionListener, Serializable{
 	public Screen(File backFile)
 	{
 		enableEvents(
-	            AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK);
+	            AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
 		objects = new ArrayList<Item>();
+		setFocusable(true);
+		requestFocusInWindow();
 		try {
-			this.background = ImageIO.read(backFile);
-		} catch (IOException e1) {
+			FileInputStream fi = new FileInputStream(backFile);
+			ObjectInputStream oi = new ObjectInputStream(fi);
+			this.scale = oi.readDouble();
+			String backPath = (String) oi.readObject();
+			this.background = ImageIO.read(new File(backPath));
+			oi.close();
+			fi.close();
+			this.scale = ((double) Math.max(this.background.getHeight(), this.background.getWidth())) * this.scale;
+		} catch (IOException | ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		this.backFile = backFile;
-		try
-		{
-			this.background = ImageIO.read(new File("commodore.png"));
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
 		setPreferredSize(new Dimension(background.getWidth(), background.getHeight()));
-	}
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 	@Override
 	public void paintComponent(Graphics g)
@@ -88,7 +107,24 @@ public class Screen extends JPanel implements ActionListener, Serializable{
 	}
 	public void addObject(Item item)
 	{
+		if(item.getType() == Item.SQUARE)
+		{
+			item.setWidth(scale * item.getItemWidth());
+			item.setHeight(scale * item.getItemHeight());
+			item.setImg();
+		}
+		if(item.getType() == Item.CIRCLE)
+		{
+			item.setDiameter(scale * item.getDiameter());
+			item.setImg();
+		}
 		objects.add(item);
+	}
+	public void removeObject(Item item)
+	{
+		objects.remove(item);
+		this.revalidate();
+		this.repaint();
 	}
 	public Optional<Item> itemAtPoint(Point point)
 	{
@@ -109,13 +145,13 @@ public class Screen extends JPanel implements ActionListener, Serializable{
 	@Override
 	protected void processMouseEvent(MouseEvent event)
 	{
+		Point location = event.getPoint();
 		if(event.getButton() == MouseEvent.BUTTON1)
 		{
 			int id = event.getID();
 			switch(id)
 			{
 				case MouseEvent.MOUSE_PRESSED:
-					Point location = event.getPoint();
 					Optional<Item> clicked = itemAtPoint(location);
 					if(clicked.isPresent())
 					{
@@ -132,6 +168,11 @@ public class Screen extends JPanel implements ActionListener, Serializable{
 				default:
 					break;
 			}
+		}
+		else if(SwingUtilities.isRightMouseButton(event) && MouseEvent.MOUSE_PRESSED == event.getID())
+		{
+			popup = new PopupMenu(location, this);
+			popup.show(event.getComponent(), event.getX(), event.getY());
 		}
 		super.processMouseEvent(event);
 	}
@@ -165,8 +206,16 @@ public class Screen extends JPanel implements ActionListener, Serializable{
 	{
 		return this.background;
 	}
-	public void save()
+	public double getScale()
 	{
-		
+		return this.scale;
+	}
+	public void setScale(double scale)
+	{
+		this.scale = scale;
+	}
+	public void setScale(int scale)
+	{
+		this.scale = (double) (1/scale);
 	}
 }
