@@ -21,7 +21,7 @@
 		   	<descriptorRefs>
 		    <descriptorRef>jar-with-dependencies</descriptorRef>
 		  </descriptorRefs>
-		  <finalName>calendarmaker-0.0.1-SNAPSHOT</finalName>
+		  <finalName>banquetLayout-0.0.1-SNAPSHOT</finalName>
 		   </configuration>
 		   <executions>
 		   	<execution>

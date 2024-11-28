@@ -59,7 +59,6 @@ public class Screen extends JPanel implements Serializable{
 			oi.close();
 			fi.close();
 			this.scale = ((double) Math.max(this.background.getHeight(), this.background.getWidth())) * this.scale;
-			//this.scale = ((double) this.background.getWidth()) / ((double) 35 * 12);
 		}
 		catch(NullPointerException e)
 		{
@@ -78,7 +77,8 @@ public class Screen extends JPanel implements Serializable{
 		objects = new ArrayList<Item>();
 		setFocusable(true);
 		requestFocusInWindow();
-		try {
+		try 
+		{
 			FileInputStream fi = new FileInputStream(backFile);
 			ObjectInputStream oi = new ObjectInputStream(fi);
 			this.scale = oi.readDouble();
@@ -87,9 +87,8 @@ public class Screen extends JPanel implements Serializable{
 			oi.close();
 			fi.close();
 			this.scale = ((double) Math.max(this.background.getHeight(), this.background.getWidth())) * this.scale;
-		} catch (IOException | ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
 		}
 		this.backFile = backFile;
 		setPreferredSize(new Dimension(background.getWidth(), background.getHeight()));

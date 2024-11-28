@@ -513,13 +513,12 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 				JFrame f = new JFrame();
 				JLabel label = new JLabel("Name is already in use.");
 				JButton button = new JButton("Close");
-				button.addActionListener(c -> {f.dispose();});
+				button.addActionListener(c -> {f.dispose(); saveNameMenu();});
 				f.add(label);
 				f.add(button);
 				f.pack();
 				f.setVisible(true);
 				f.setLocationRelativeTo(null);
-				saveNameMenu();
 			}
 			else
 			{

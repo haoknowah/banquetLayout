@@ -1,6 +1,8 @@
 package io;
 
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -432,16 +435,23 @@ public class Save{
 	}
 	public static void newRoom(double scale)
 	{
-		JFileChooser find = new JFileChooser();
-		find.setCurrentDirectory(new File(System.getProperty("user.dir")));
-		find.showOpenDialog(find);
-		File file = find.getSelectedFile();
-		JFileChooser save = new JFileChooser();
-		save.setCurrentDirectory(new File(System.getProperty("user.dir")));
-		save.showSaveDialog(save);
-		File room = save.getSelectedFile();
 		try
 		{
+			JFileChooser find = new JFileChooser();
+			find.setCurrentDirectory(new File(System.getProperty("user.dir")));
+			find.setApproveButtonText("Select image of room");
+			int result = find.showOpenDialog(find);
+			File file = null;
+			File room = null;
+			if(JFileChooser.APPROVE_OPTION == result)
+			{
+				file = find.getSelectedFile();
+				JFileChooser save = new JFileChooser();
+				save.setCurrentDirectory(new File(System.getProperty("user.dir")));
+				save.showSaveDialog(save);
+				room = save.getSelectedFile();
+				room = new File(room.getParent(), room.getName() + ".rm");
+			}
 			FileOutputStream fo = new FileOutputStream(room);
 			ObjectOutputStream oo = new ObjectOutputStream(fo);
 			oo.writeDouble(scale);
@@ -450,6 +460,21 @@ public class Save{
 			oo.close();
 			fo.flush();
 			fo.close();
+		}
+		catch(NullPointerException e)
+		{
+			JFrame f = new JFrame();
+			f.setLayout(new GridBagLayout());
+			GridBagConstraints con = new GridBagConstraints();
+			JLabel label = new JLabel("Invalid selection.");
+			JButton button = new JButton("Close");
+			button.addActionListener(c -> {f.dispose();});
+			f.add(label, con);
+			con.gridy = 1;
+			f.add(button, con);
+			f.pack();
+			f.setVisible(true);
+			f.setLocationRelativeTo(null);
 		}
 		catch(Exception e)
 		{
