@@ -1,0 +1,78 @@
+
+
+Version:	3.50
+CmdLine:	D:\Documents\ProjectWorkspace\banquetLayout\BanquetLayoutLauncher.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	D:\Documents\ProjectWorkspace\banquetLayout\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	
+Java max ver:	
+JRE paths:	jre
+Check launcher:	D:\Documents\ProjectWorkspace\banquetLayout\jre\bin\javaw.exe (OK)
+Version string: 1.008.000_301 / 64-Bit (OK)
+Substitute:	JAVA_HOME = D:\JavaFiles
+Launcher:	D:\Documents\ProjectWorkspace\banquetLayout\jre\bin\javaw.exe
+Launcher args:	-Denv.java.home="D:\JavaFiles" -jar "D:\Documents\ProjectWorkspace\banquetLayout\BanquetLayoutLauncher.exe"
+Args length:	107/32768 chars
+Exit code:	0
+
+
+Version:	3.50
+CmdLine:	D:\Documents\ProjectWorkspace\banquetLayout\BanquetLayoutLauncher.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	D:\Documents\ProjectWorkspace\banquetLayout\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	
+Java max ver:	
+JRE paths:	jre
+Check launcher:	D:\Documents\ProjectWorkspace\banquetLayout\jre\bin\javaw.exe (OK)
+Version string: 1.008.000_301 / 64-Bit (OK)
+Set var:	JAVA_HOME  =  jre\bin
+Launcher:	D:\Documents\ProjectWorkspace\banquetLayout\jre\bin\javaw.exe
+Launcher args:	-jar "D:\Documents\ProjectWorkspace\banquetLayout\BanquetLayoutLauncher.exe"
+Args length:	76/32768 chars
+Exit code:	0
+
+
+Version:	3.50
+CmdLine:	D:\Documents\ProjectWorkspace\banquetLayout\BanquetLayoutLauncher.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	D:\Documents\ProjectWorkspace\banquetLayout\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	
+Java max ver:	
+JRE paths:	jre
+Check launcher:	D:\Documents\ProjectWorkspace\banquetLayout\jre\bin\javaw.exe (OK)
+Version string: 1.008.000_301 / 64-Bit (OK)
+Substitute:	JAVA_HOME = D:\JavaFiles
+Set var:	JAVA_HOME  =  jre D:\JavaFiles
+Launcher:	D:\Documents\ProjectWorkspace\banquetLayout\jre\bin\javaw.exe
+Launcher args:	-jar "D:\Documents\ProjectWorkspace\banquetLayout\BanquetLayoutLauncher.exe"
+Args length:	76/32768 chars
+Exit code:	0
+
+
+Version:	3.50
+CmdLine:	D:\Documents\ProjectWorkspace\banquetLayout\BanquetLayoutLauncher.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	D:\Documents\ProjectWorkspace\banquetLayout\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	
+Java max ver:	
+JRE paths:	jre
+Check launcher:	D:\Documents\ProjectWorkspace\banquetLayout\jre\bin\javaw.exe (OK)
+Version string: 1.008.000_301 / 64-Bit (OK)
+Substitute:	JAVA_HOME = D:\JavaFiles
+Set var:	JAVA_HOME  =  jre D:\JavaFiles
+Launcher:	D:\Documents\ProjectWorkspace\banquetLayout\jre\bin\javaw.exe
+Launcher args:	-jar "D:\Documents\ProjectWorkspace\banquetLayout\BanquetLayoutLauncher.exe"
+Args length:	76/32768 chars
+Exit code:	0

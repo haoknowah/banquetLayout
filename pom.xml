@@ -36,7 +36,58 @@
 		 <plugin>
 		    <artifactId>maven-jar-plugin</artifactId>
 		    <version>3.0.2</version>
+		    <executions>
+		    	<execution>
+		    		<id>default-jar</id>
+		    		<phase>none</phase>
+		    	</execution>
+		    </executions>
 		</plugin>
+		<plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>2.0.1</version>
+                <executions>
+                    <execution>
+                        <id>l4j-clui</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                        <configuration>
+                            <dontWrapJar>false</dontWrapJar>
+                            <headerType>console</headerType>
+                            <!-- <headerType>gui</headerType> -->
+                            <!-- <jar>${project.build.directory}/scheduler-0.0.1-SNAPSHOT.jar</jar> -->
+                            <jar>target/banquetLayout-0.0.1-SNAPSHOT-jar-with-dependencies.jar</jar>
+                            <!-- <jar>${project.build.directory}/${artifactId}-${version}.jar</jar> -->
+                            <outfile>${project.build.directory}/test.exe</outfile>
+                            <downloadUrl>http://java.com/download</downloadUrl>
+                            <classPath>
+                                <mainClass>Meow</mainClass>
+                                <!-- <mainClass>SchedulerApplication</mainClass> -->
+                                <!-- <mainClass>com/XXX/scheduler/SchedulerApplication</mainClass> -->
+                                <addDependencies>true</addDependencies>
+                                <preCp>anything</preCp>
+                            </classPath>
+                            <!-- <icon>src/main/resources/icon/application.ico</icon> -->
+                            <jre>
+                                <!-- <path>../jdk15</path> -->
+                                <!-- <jdkPreference>preferJdk</jdkPreference> -->
+                                <jdkPreference>preferJre</jdkPreference>
+                                <minVersion>8</minVersion>
+                                <!-- <minVersion>1.8.0_212</minVersion> -->
+                                <initialHeapSize>256</initialHeapSize>
+                                <maxHeapSize>3000</maxHeapSize>
+                                <!-- <minVersion>1.7.0</minVersion> -->
+                                <!-- <minVersion>1.6.0</minVersion> -->
+                                <!-- <jdkPreference>preferJre</jdkPreference> -->
+                            </jre>
+                        
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 	  </plugins>
   </build>
   <dependencies>
@@ -45,6 +96,12 @@
 	    <groupId>org.apache.xmlgraphics</groupId>
 	    <artifactId>batik-util</artifactId>
 	    <version>1.17</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/com.akathist.maven.plugins.launch4j/launch4j-maven-plugin -->
+	<dependency>
+	    <groupId>com.akathist.maven.plugins.launch4j</groupId>
+	    <artifactId>launch4j-maven-plugin</artifactId>
+	    <version>2.5.2</version>
 	</dependency>
   	<!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-svggen -->
 	<dependency>
