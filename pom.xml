@@ -73,6 +73,7 @@
                             <!-- <icon>src/main/resources/icon/application.ico</icon> -->
                             <jre>
                                 <!-- <path>../jdk15</path> -->
+                                <path>${project.basedir}/jre</path>
                                 <!-- <jdkPreference>preferJdk</jdkPreference> -->
                                 <jdkPreference>preferJre</jdkPreference>
                                 <minVersion>8</minVersion>
