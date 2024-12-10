@@ -138,7 +138,7 @@ public class Item implements Serializable{
 			g.setComposite(AlphaComposite.Src);
 			g.setColor(Color.yellow);
 			g.fillOval(0, 0, (int) this.diameter, (int) this.diameter);
-			g.setColor(Color.red);
+			g.setColor(Color.black);
 			g.drawOval(0, 0, (int) this.diameter, (int) this.diameter);
 			g.dispose();
 		}
