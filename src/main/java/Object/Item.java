@@ -25,6 +25,7 @@ public class Item implements Serializable{
 	private int type;
 	public static final int SQUARE = 1;
 	public static final int CIRCLE = 2;
+	public static final int PREFAB = 3;
 	private String name = "";
 	private final Point location = new Point();
 	public Item()
@@ -86,6 +87,10 @@ public class Item implements Serializable{
 		return this.type;
 	}
 	
+	public void setType(int type)
+	{
+		this.type = type;
+	}
 	public double getItemHeight()
 	{
 		return this.height;

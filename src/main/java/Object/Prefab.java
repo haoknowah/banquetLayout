@@ -1,5 +1,6 @@
 package Object;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -20,12 +21,14 @@ public class Prefab extends Item{
 	public Prefab()
 	{
 		objects = new ArrayList<Item>();
+		this.setType(PREFAB);
 	}
 	public Prefab(List<Item> objects)
 	{
 		this.objects = objects;
 		setSize(objects);
 		setImg();
+		this.setType(PREFAB);
 	}
 	public void addObject(Item object)
 	{
@@ -51,6 +54,21 @@ public class Prefab extends Item{
 		g.dispose();
 		this.img = img;
 	}
+	public void setImg(double scale)
+	{
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = img.createGraphics();
+		for(Item i : objects)
+		{
+			i.setWidth(scale * i.getItemWidth());
+			i.setHeight(scale * i.getItemHeight());
+			i.setImg();
+			BufferedImage icon = i.getImg();
+			g.drawImage(icon, (int) ((i.getLocation().x - origin.x) * scale), (int) ((i.getLocation().y - origin.y) * scale), null);
+		}
+		g.dispose();
+		this.img = img;
+	}
 	@Override
 	public BufferedImage getImg()
 	{
@@ -58,8 +76,8 @@ public class Prefab extends Item{
 	}
 	public void setSize(List<Item> objects)
 	{
-		int lx = 10000000;
-		int uy = 10000000;
+		int lx = objects.get(0).getLocation().x;
+		int uy = objects.get(0).getLocation().y;
 		int rx = 0;
 		int dy = 0;
 		for(Item i : objects)
@@ -73,9 +91,9 @@ public class Prefab extends Item{
 			{
 				uy = i.getLocation().y;
 			}
-			if(rx < i.getLocation().y + icon.getWidth())
+			if(rx < i.getLocation().x + icon.getWidth())
 			{
-				rx = i.getLocation().y + icon.getWidth();
+				rx = i.getLocation().x + icon.getWidth();
 			}
 			if(dy < i.getLocation().y + icon.getHeight())
 			{
@@ -86,5 +104,9 @@ public class Prefab extends Item{
 		this.height = dy - uy;
 		this.origin.x = lx;
 		this.origin.y = uy;
+	}
+	public Dimension getSize()
+	{
+		return new Dimension(this.width, this.height);
 	}
 }

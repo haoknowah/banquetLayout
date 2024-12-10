@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import Object.Item;
+import Object.Prefab;
 
 public class Screen extends JPanel implements Serializable{
 
@@ -117,8 +118,16 @@ public class Screen extends JPanel implements Serializable{
 			item.setDiameter(scale * item.getDiameter());
 			item.setImg();
 		}
+		if(item.getType() == Item.PREFAB)
+		{
+			Dimension dim = ((Prefab) item).getSize();
+			item.setWidth(scale * dim.width);
+			item.setHeight(scale * dim.height);
+			((Prefab) item).setImg(scale);
+		}
 		objects.add(item);
 	}
+
 	public void removeObject(Item item)
 	{
 		objects.remove(item);
@@ -155,6 +164,7 @@ public class Screen extends JPanel implements Serializable{
 					if(clicked.isPresent())
 					{
 						selectedItem = clicked.get();
+						System.out.println(selectedItem.getItemWidth());
 						Point loc = selectedItem.getLocation();
 						relativeLocation = new Point(location.x - loc.x, location.y - loc.y);
 					}
