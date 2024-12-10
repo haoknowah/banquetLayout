@@ -61,7 +61,7 @@
                             <!-- <jar>${project.build.directory}/scheduler-0.0.1-SNAPSHOT.jar</jar> -->
                             <jar>target/banquetLayout-0.0.1-SNAPSHOT-jar-with-dependencies.jar</jar>
                             <!-- <jar>${project.build.directory}/${artifactId}-${version}.jar</jar> -->
-                            <outfile>${project.build.directory}/test.exe</outfile>
+                            <outfile>${project.build.directory}/BanquetLayout.exe</outfile>
                             <downloadUrl>http://java.com/download</downloadUrl>
                             <classPath>
                                 <mainClass>Meow</mainClass>

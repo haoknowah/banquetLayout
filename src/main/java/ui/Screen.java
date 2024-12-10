@@ -17,6 +17,8 @@ import java.util.Optional;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -90,6 +92,10 @@ public class Screen extends JPanel implements Serializable{
 			this.scale = ((double) Math.max(this.background.getHeight(), this.background.getWidth())) * this.scale;
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
+			JFrame f = new JFrame();
+			f.add(new JLabel(e.getMessage()));
+			f.setVisible(true);
+			f.setLocationRelativeTo(null);
 		}
 		this.backFile = backFile;
 		setPreferredSize(new Dimension(background.getWidth(), background.getHeight()));
