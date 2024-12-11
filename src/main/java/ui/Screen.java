@@ -70,6 +70,10 @@ public class Screen extends JPanel implements Serializable{
 		catch(Exception e)
 		{
 			e.printStackTrace();
+			JFrame f = new JFrame();
+			f.add(new JLabel(e.getMessage()));
+			f.setVisible(true);
+			f.setLocationRelativeTo(null);
 		}
 		setPreferredSize(new Dimension(background.getWidth(), background.getHeight()));
 	}
@@ -90,6 +94,7 @@ public class Screen extends JPanel implements Serializable{
 			oi.close();
 			fi.close();
 			this.scale = ((double) Math.max(this.background.getHeight(), this.background.getWidth())) * this.scale;
+			System.out.println("A");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			JFrame f = new JFrame();

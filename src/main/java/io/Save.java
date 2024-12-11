@@ -450,7 +450,7 @@ public class Save{
 				save.setCurrentDirectory(new File(System.getProperty("user.dir")));
 				save.showSaveDialog(save);
 				room = save.getSelectedFile();
-				room = new File(room.getParent(), room.getName() + ".rm");
+				room = new File(room.getParent(), room.getName() + ".room");
 			}
 			FileOutputStream fo = new FileOutputStream(room);
 			ObjectOutputStream oo = new ObjectOutputStream(fo);
