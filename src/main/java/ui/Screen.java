@@ -35,7 +35,6 @@ public class Screen extends JPanel implements Serializable{
 	/**
 	 * 
 	 */
-	//public File backFile;
 	private List<Item> objects;
 	private BufferedImage background;
 	private Item selectedItem;

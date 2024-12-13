@@ -1,5 +1,7 @@
 ui\Screen.class
+Meow$1.class
 io\ItemActionListener.class
+Meow.class
 ui\PopupMenu.class
 io\Save.class
 ui\PrefabWindow.class
