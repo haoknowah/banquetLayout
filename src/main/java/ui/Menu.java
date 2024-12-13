@@ -282,6 +282,12 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 			else if(e.getItem().equals("SQUARE"))
 			{
 				isSquare = true;
+				//get content pane
+				//yub.remove(1);
+				if(yub.getContentPane().getComponentCount() >= 2)
+				{
+					yub.getContentPane().remove(yub.getContentPane().getComponentCount()-1);
+				}
 				yub.add(p, con);
 				options.removeAllItems();
 				for(Item i : square)
@@ -292,6 +298,10 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 			else if(e.getItem().equals("CIRCLE"))
 			{
 				isSquare = false;
+				if(yub.getContentPane().getComponentCount() >= 2)
+				{
+					yub.getContentPane().remove(yub.getContentPane().getComponentCount()-1);
+				}
 				yub.add(p, con);
 				options.removeAllItems();
 				for(Item i : circle)
@@ -471,6 +481,17 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 		return item;
 	}
 
+	public void removeItem()
+	{
+		yub = new JFrame("Remove Item From List");
+		JComboBox<String> options = new JComboBox<>(new String[] {"Select Item", "SQUARE", "CIRCLE"});
+		options.addItemListener(this);
+		yub.add(options);
+		yub.pack();
+		yub.setVisible(true);
+		yub.setLocationRelativeTo(null);
+	}
+	
 	public boolean findDup(String name)
 	{
 		boolean x = true;
@@ -532,16 +553,7 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 		}
 		return x;
 	}
-	public void removeItem()
-	{
-		yub = new JFrame("Remove Item From List");
-		JComboBox<String> options = new JComboBox<>(new String[] {"Select Item", "SQUARE", "CIRCLE"});
-		options.addItemListener(this);
-		yub.add(options);
-		yub.pack();
-		yub.setVisible(true);
-		yub.setLocationRelativeTo(null);
-	}
+	
 	public void setScreen(Screen screen)
 	{
 		this.screen = screen;
