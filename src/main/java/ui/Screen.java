@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -34,7 +35,7 @@ public class Screen extends JPanel implements Serializable{
 	/**
 	 * 
 	 */
-	public File backFile;
+	//public File backFile;
 	private List<Item> objects;
 	private BufferedImage background;
 	private Item selectedItem;
@@ -53,12 +54,13 @@ public class Screen extends JPanel implements Serializable{
 			JFileChooser find = new JFileChooser();
 			find.setCurrentDirectory(new File(System.getProperty("user.dir")));
 			find.showOpenDialog(find);
-			backFile = find.getSelectedFile();
+			File backFile = find.getSelectedFile();
 			FileInputStream fi = new FileInputStream(backFile);
 			ObjectInputStream oi = new ObjectInputStream(fi);
 			this.scale = oi.readDouble();
-			String backPath = (String) oi.readObject();
-			this.background = ImageIO.read(new File(backPath));
+			byte[] backgroundData = (byte[]) oi.readObject();
+			ByteArrayInputStream bi = new ByteArrayInputStream(backgroundData);
+			this.background = ImageIO.read(bi);
 			oi.close();
 			fi.close();
 			this.scale = ((double) Math.max(this.background.getHeight(), this.background.getWidth())) * this.scale;
@@ -77,7 +79,7 @@ public class Screen extends JPanel implements Serializable{
 		}
 		setPreferredSize(new Dimension(background.getWidth(), background.getHeight()));
 	}
-	public Screen(File backFile)
+	public Screen(double scale, ByteArrayInputStream bi)
 	{
 		enableEvents(
 	            AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
@@ -86,23 +88,18 @@ public class Screen extends JPanel implements Serializable{
 		requestFocusInWindow();
 		try 
 		{
-			FileInputStream fi = new FileInputStream(backFile);
-			ObjectInputStream oi = new ObjectInputStream(fi);
-			this.scale = oi.readDouble();
-			String backPath = (String) oi.readObject();
-			this.background = ImageIO.read(new File(backPath));
-			oi.close();
-			fi.close();
+			this.scale = scale;
+			this.background = ImageIO.read(bi);
+			bi.close();
 			this.scale = ((double) Math.max(this.background.getHeight(), this.background.getWidth())) * this.scale;
 			System.out.println("A");
-		} catch (IOException | ClassNotFoundException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 			JFrame f = new JFrame();
 			f.add(new JLabel(e.getMessage()));
 			f.setVisible(true);
 			f.setLocationRelativeTo(null);
 		}
-		this.backFile = backFile;
 		setPreferredSize(new Dimension(background.getWidth(), background.getHeight()));
 	}
 	@Override

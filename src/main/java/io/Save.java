@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -210,7 +212,11 @@ public class Save{
 				//add code for importing background image
 				FileOutputStream fo = new FileOutputStream(file);
 				ObjectOutputStream os = new ObjectOutputStream(fo);
-				os.writeObject(screen.backFile.getAbsolutePath());
+				os.writeDouble(screen.getScale());
+				ByteArrayOutputStream bo = new ByteArrayOutputStream();
+				ImageIO.write(screen.getBackgroundImage(), "png", bo);
+				byte[] backgroundData = bo.toByteArray();
+				os.writeObject(backgroundData);
 				os.writeInt(screen.getObjects().size());
 				for(Item i : screen.getObjects())
 				{
@@ -218,6 +224,7 @@ public class Save{
 					os.writeObject(i);
 				}
 				os.close();
+				bo.close();
 				fo.close();
 				for(Item i : screen.getObjects())
 				{
@@ -304,8 +311,10 @@ public class Save{
 			{
 				FileInputStream fi = new FileInputStream(file);
 				ObjectInputStream is = new ObjectInputStream(fi);
-				File backFile = new File((String) is.readObject());
-				Screen screen = new Screen(backFile);
+				double scale = is.readDouble();
+				byte[] backgroundData = (byte[]) is.readObject();
+				ByteArrayInputStream bi = new ByteArrayInputStream(backgroundData);
+				Screen screen = new Screen(scale, bi);
 				int items = is.readInt();
 				for(int i = 0; i < items; i++)
 				{
@@ -314,6 +323,7 @@ public class Save{
 					screen.addObject(object);
 				}
 				is.close();
+				bi.close();
 				fi.close();
 				return screen;
 			}
@@ -453,11 +463,16 @@ public class Save{
 				room = new File(room.getParent(), room.getName() + ".room");
 			}
 			FileOutputStream fo = new FileOutputStream(room);
+			ByteArrayOutputStream bo = new ByteArrayOutputStream();
 			ObjectOutputStream oo = new ObjectOutputStream(fo);
 			oo.writeDouble(scale);
-			oo.writeObject(file.getAbsolutePath());
+			ImageIO.write(ImageIO.read(file), "png", bo);
+			byte[] data = bo.toByteArray();
+			oo.writeObject(data);
 			oo.flush();
 			oo.close();
+			bo.flush();
+			bo.close();
 			fo.flush();
 			fo.close();
 		}
