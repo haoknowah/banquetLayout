@@ -124,6 +124,7 @@ public class Item implements Serializable{
 		if(type == 1)
 		{
 			icon = new BufferedImage((int) width, (int) height, BufferedImage.TYPE_INT_RGB);
+			//System.out.println(width + " " + height);
 			Graphics2D g = icon.createGraphics();
 			g.setColor(Color.yellow);
 			g.fillRect(0, 0, (int) this.width-1, (int) this.height-1);

@@ -209,14 +209,13 @@ public class Save{
 			File file = find.getSelectedFile();
 			try
 			{
-				//add code for importing background image
 				FileOutputStream fo = new FileOutputStream(file);
 				ObjectOutputStream os = new ObjectOutputStream(fo);
 				os.writeDouble(screen.getScale());
 				ByteArrayOutputStream bo = new ByteArrayOutputStream();
 				ImageIO.write(screen.getBackgroundImage(), "png", bo);
-				byte[] backgroundData = bo.toByteArray();
-				os.writeObject(backgroundData);
+				byte[] data = bo.toByteArray();
+				os.writeObject(data);
 				os.writeInt(screen.getObjects().size());
 				for(Item i : screen.getObjects())
 				{
@@ -320,7 +319,7 @@ public class Save{
 				{
 					Item object = (Item) is.readObject();
 					object.setImg();
-					screen.addObject(object);
+					screen.objects.add(object);
 				}
 				is.close();
 				bi.close();

@@ -164,7 +164,12 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 				Save.newRoom((double) (1 / ((double) Integer.parseInt(scale.getText()) * 12)));
 				break;
 			case "Load":
+				if(this.screen != null)
+				{
+					this.window.removeScreen();
+				}
 				this.screen = Save.loadFile();
+				this.itmActList.setScreen(this.screen);
 				this.window.addScreen(screen);
 				this.window.pack();
 				this.window.revalidate();

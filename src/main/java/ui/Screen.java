@@ -35,7 +35,7 @@ public class Screen extends JPanel implements Serializable{
 	/**
 	 * 
 	 */
-	private List<Item> objects;
+	public List<Item> objects;
 	private BufferedImage background;
 	private Item selectedItem;
 	private Point relativeLocation;
@@ -87,11 +87,9 @@ public class Screen extends JPanel implements Serializable{
 		requestFocusInWindow();
 		try 
 		{
-			this.scale = scale;
 			this.background = ImageIO.read(bi);
 			bi.close();
-			this.scale = ((double) Math.max(this.background.getHeight(), this.background.getWidth())) * this.scale;
-			System.out.println("A");
+			this.scale = scale;
 		} catch (IOException e) {
 			e.printStackTrace();
 			JFrame f = new JFrame();
@@ -171,7 +169,6 @@ public class Screen extends JPanel implements Serializable{
 					if(clicked.isPresent())
 					{
 						selectedItem = clicked.get();
-						System.out.println(selectedItem.getItemWidth());
 						Point loc = selectedItem.getLocation();
 						relativeLocation = new Point(location.x - loc.x, location.y - loc.y);
 					}
