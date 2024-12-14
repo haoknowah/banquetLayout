@@ -2,7 +2,7 @@ package io;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Set;
+import java.util.List;
 
 import javax.swing.JMenu;
 import javax.swing.event.MenuEvent;
@@ -14,30 +14,32 @@ import ui.Screen;
 
 public class ItemActionListener implements ActionListener, MenuListener{
 
-	private Set<Item> square;
-	private Set<Item> circle;
+	private List<Item> square;
+	private List<Item> circle;
 	private boolean isSquare = false;
 	private boolean isRound = false;
 	private Screen screen;
 	public ItemActionListener(Menu menu)
 	{
 		square = Save.getSquare();
+		square.sort((x, y) -> x.getName().compareTo(y.getName()));
 		circle = Save.getCircle();
+		circle.sort((x, y) -> x.getName().compareTo(y.getName()));
 	}
 	public void setScreen(Screen screen)
 	{
 		this.screen = screen;
 	}
-	public Set<Item> getSquare() {
+	public List<Item> getSquare() {
 		return square;
 	}
-	public void setSquare(Set<Item> square) {
+	public void setSquare(List<Item> square) {
 		this.square = square;
 	}
-	public Set<Item> getCircle() {
+	public List<Item> getCircle() {
 		return circle;
 	}
-	public void setCircle(Set<Item> circle) {
+	public void setCircle(List<Item> circle) {
 		this.circle = circle;
 	}
 	@Override

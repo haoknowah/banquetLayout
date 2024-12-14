@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
-import java.util.Set;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -20,7 +20,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
 
 import Object.Item;
 import io.ItemActionListener;
@@ -41,8 +40,8 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 	private JFrame yub;
 	private PrefabActionListener preActList;
 	private ItemActionListener itmActList;
-	private Set<Item> square;
-	private Set<Item> circle;
+	private List<Item> square;
+	private List<Item> circle;
 	private JPanel span;
 	private JPanel cpan;
 	private JTextField name;
@@ -228,21 +227,23 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 					item.setName(name);
 					if(item.getType() == Item.SQUARE)
 					{
-						square.add(item);
+						this.square.add(item);
+						this.square.sort((x, y) -> x.getName().compareTo(y.getName()));
 						Save.updateSquare(square);
 						menuItem = new JMenuItem(item.getName());
-						menuItem.addActionListener(this);
+						menuItem.addActionListener(itmActList);
 						submenu.add(menuItem);
-						itmActList.setSquare(square);
+						itmActList.setSquare(this.square);
 					}
 					if(item.getType() == Item.CIRCLE)
 					{
-						circle.add(item);
+						this.circle.add(item);
+						this.circle.sort((x, y) -> x.getName().compareTo(y.getName()));
 						Save.updateCircle(circle);
 						menuItem = new JMenuItem(item.getName());
-						menuItem.addActionListener(this);
+						menuItem.addActionListener(itmActList);
 						submenu2.add(menuItem);
-						itmActList.setCircle(circle);
+						itmActList.setCircle(this.circle);
 					}
 				}
 				break;
@@ -282,8 +283,6 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 			else if(e.getItem().equals("SQUARE"))
 			{
 				isSquare = true;
-				//get content pane
-				//yub.remove(1);
 				if(yub.getContentPane().getComponentCount() >= 2)
 				{
 					yub.getContentPane().remove(yub.getContentPane().getComponentCount()-1);
@@ -511,18 +510,17 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 				GridBagConstraints con = new GridBagConstraints();
 				JLabel label = new JLabel("Name is already in use.");
 				JButton button = new JButton("Close");
-				button.addActionListener(c -> {f.dispose();});
+				button.addActionListener(c -> {f.dispose(); saveNameMenu();});
 				f.add(label, con);
 				con.gridy = 1;
 				f.add(button, con);
 				f.pack();
 				f.setVisible(true);
 				f.setLocationRelativeTo(null);
-				saveNameMenu();
 			}
 			else
 			{
-				square.add(constructItem());
+				constructItem();
 			}
 		}
 		else if(yub.getContentPane().getComponent(1) == cpan)
@@ -548,7 +546,7 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 			}
 			else
 			{
-				circle.add(constructItem());
+				constructItem();
 			}
 		}
 		return x;

@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -17,9 +18,7 @@ import java.io.ObjectOutputStream;
 import java.io.OptionalDataException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -33,7 +32,7 @@ import ui.PrefabScreen;
 import ui.Screen;
 
 public class Save{
-	public static Set<Item> getSquare()
+	public static List<Item> getSquare()
 	{
 		try
 		{
@@ -41,7 +40,7 @@ public class Save{
 			FileInputStream fi = new FileInputStream(file);
 			ObjectInputStream is = new ObjectInputStream(fi);
 			int items = is.readInt();
-			Set<Item> square = new HashSet<Item>();
+			List<Item> square = new ArrayList<Item>();
 			for(int i = 0; i < items; i++)
 			{
 				Item object = (Item) is.readObject();
@@ -64,12 +63,16 @@ public class Save{
 				Writer writer = new FileWriter("square.txt");
 				writer.flush();
 				writer.close();
-				return new HashSet<Item>();
+				return new ArrayList<Item>();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-				return new HashSet<Item>();
+				return new ArrayList<Item>();
 			}
+		}
+		catch(EOFException e)
+		{
+			return new ArrayList<Item>();
 		}
 		catch(Exception e)
 		{
@@ -78,15 +81,15 @@ public class Save{
 				Writer writer = new FileWriter("square.txt");
 				writer.flush();
 				writer.close();
-				return new HashSet<Item>();
+				return new ArrayList<Item>();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-				return new HashSet<Item>();
+				return new ArrayList<Item>();
 			}
 		}
 	}
-	public static Set<Item> getCircle()
+	public static List<Item> getCircle()
 	{
 		try
 		{
@@ -94,7 +97,7 @@ public class Save{
 			FileInputStream fi = new FileInputStream(file);
 			ObjectInputStream is = new ObjectInputStream(fi);
 			int items = is.readInt();
-			Set<Item> circle = new HashSet<Item>();
+			List<Item> circle = new ArrayList<Item>();
 			for(int i = 0; i < items; i++)
 			{
 				Item object = (Item) is.readObject();
@@ -117,12 +120,16 @@ public class Save{
 				Writer writer = new FileWriter("circle.txt");
 				writer.flush();
 				writer.close();
-				return new HashSet<Item>();
+				return new ArrayList<Item>();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-				return new HashSet<Item>();
+				return new ArrayList<Item>();
 			}
+		}
+		catch(EOFException e)
+		{
+			return new ArrayList<Item>();
 		}
 		catch(Exception e)
 		{
@@ -131,15 +138,15 @@ public class Save{
 				Writer writer = new FileWriter("circle.txt");
 				writer.flush();
 				writer.close();
-				return new HashSet<Item>();
+				return new ArrayList<Item>();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-				return new HashSet<Item>();
+				return new ArrayList<Item>();
 			}
 		}
 	}
-	public static void updateSquare(Set<Item> square)
+	public static void updateSquare(List<Item> square)
 	{
 		try
 		{
@@ -163,7 +170,7 @@ public class Save{
 			e.printStackTrace();
 		}
 	}
-	public static void updateCircle(Set<Item> circle)
+	public static void updateCircle(List<Item> circle)
 	{
 		try
 		{
