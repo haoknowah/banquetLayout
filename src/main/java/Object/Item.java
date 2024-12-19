@@ -5,6 +5,7 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
@@ -28,7 +29,7 @@ public class Item implements Serializable{
 	public static final int PREFAB = 3;
 	private String name = "";
 	private final Point location = new Point();
-	private double rads = 0;
+	private double degrees = 0;
 	public Item()
 	{
 		this.width = 0;
@@ -140,13 +141,33 @@ public class Item implements Serializable{
 		BufferedImage icon;
 		if(type == 1)
 		{
-			icon = new BufferedImage((int) width, (int) height, BufferedImage.TYPE_INT_RGB);
-			Graphics2D g = icon.createGraphics();
-			g.setColor(Color.yellow);
-			g.fillRect(0, 0, (int) this.width-1, (int) this.height-1);
-			g.setColor(Color.BLACK);
-			g.drawRect(0, 0, (int) this.width, (int) this.height);
-			g.dispose();
+			if(degrees == 0)
+			{
+				icon = new BufferedImage((int) width, (int) height, BufferedImage.TYPE_INT_RGB);
+				Graphics2D g = icon.createGraphics();
+				g.setColor(Color.yellow);
+				g.fillRect(0, 0, (int) this.width-1, (int) this.height-1);
+				g.setColor(Color.BLACK);
+				g.drawRect(0, 0, (int) this.width, (int) this.height);
+				g.dispose();
+			}
+			else
+			{
+	            double sin = Math.abs(Math.sin(degrees)), cos = Math.abs(Math.cos(degrees));
+	            double newWidth = Math.floor(width * cos + height * sin);
+	            double newHeight = Math.floor(height * cos + width * sin);
+	            icon = new BufferedImage((int) newWidth, (int) newHeight, BufferedImage.TYPE_INT_ARGB);
+	            Graphics2D g = icon.createGraphics();
+	            AffineTransform afflac = new AffineTransform();
+	            afflac.translate((newWidth - width)/2, (newHeight - height)/2);
+	            afflac.rotate(degrees, width/2, height/2);
+	            g.setTransform(afflac);
+	            g.setColor(Color.yellow);
+	            g.fillRect(0, 0, (int) this.width - 1, (int) this.height - 1);
+	            g.setColor(Color.black);
+	            g.drawRect(0, 0, (int) this.width, (int) this.height);
+	            g.dispose();
+			}
 		}
 		else if(type == 2)
 		{
@@ -169,20 +190,23 @@ public class Item implements Serializable{
 	{
 		this.img = null;
 	}
-	public void addRads(double rads)
+	public void addDegrees(double degrees)
 	{
-		this.rads += Math.toRadians(rads);
+		//change to set degree increments
+		this.degrees += Math.toDegrees(degrees);
+		setImg();
 	}
-	public void setRads(double rads)
+	public void setdegrees(double degrees)
 	{
-		this.rads = rads;
+		this.degrees = degrees;
 	}
-	public double getRads()
+	public double getDegrees()
 	{
-		return this.rads;
+		return this.degrees;
 	}
 	public BufferedImage rotateImage()
 	{
+		
 		return null;
 	}
 }

@@ -3,9 +3,11 @@ package ui;
 import java.awt.AWTEvent;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -110,14 +112,7 @@ public class Screen extends JPanel implements Serializable{
 		for(Item i : objects)
 		{
 			BufferedImage img = i.getImg();
-			if(i.getRads() != 0)
-			{
-				
-			}
-			else
-			{
-				g.drawImage(img, i.getLocation().x, i.getLocation().y, this);
-			}
+			g.drawImage(img, i.getLocation().x, i.getLocation().y, this);
 		}
 	}
 	public void addObject(Item item)
@@ -228,7 +223,9 @@ public class Screen extends JPanel implements Serializable{
 			if(item.isPresent())
 			{
 				selectedItem = item.get();
-				
+				selectedItem.addDegrees(rotate);
+				revalidate();
+				repaint();
 			}
 		}
 		catch(Exception e)
