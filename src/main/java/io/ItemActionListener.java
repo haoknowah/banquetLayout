@@ -49,10 +49,12 @@ public class ItemActionListener implements ActionListener, MenuListener{
 		if(isSquare)
 		{
 			item = (Item) square.stream().filter(x -> x.getName().equalsIgnoreCase(e.getActionCommand())).toArray()[0];
+			item = new Item(item.getItemHeight(), item.getItemWidth(), true);
 		}
 		else if(isRound)
 		{
 			item = (Item) circle.stream().filter(x -> x.getName().equalsIgnoreCase(e.getActionCommand())).toArray()[0];
+			item = new Item(item.getDiameter(), 0 , false);
 		}
 		screen.addObject(item);
 		screen.revalidate();

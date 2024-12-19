@@ -28,9 +28,26 @@ public class Item implements Serializable{
 	public static final int PREFAB = 3;
 	private String name = "";
 	private final Point location = new Point();
+	private double rads = 0;
 	public Item()
 	{
 		this.width = 0;
+	}
+	public Item(double dheight, double width, boolean square)
+	{
+		if(square)
+		{
+			this.height = dheight;
+			this.width = width;
+			this.type = SQUARE;
+			setImg();
+		}
+		else
+		{
+			this.diameter = height;
+			this.type = CIRCLE;
+			setImg();
+		}
 	}
 	public Item(double heightft, double heightin, double widthft, double widthin)
 	{
@@ -124,7 +141,6 @@ public class Item implements Serializable{
 		if(type == 1)
 		{
 			icon = new BufferedImage((int) width, (int) height, BufferedImage.TYPE_INT_RGB);
-			//System.out.println(width + " " + height);
 			Graphics2D g = icon.createGraphics();
 			g.setColor(Color.yellow);
 			g.fillRect(0, 0, (int) this.width-1, (int) this.height-1);
@@ -152,5 +168,21 @@ public class Item implements Serializable{
 	public void removeImage()
 	{
 		this.img = null;
+	}
+	public void addRads(double rads)
+	{
+		this.rads += Math.toRadians(rads);
+	}
+	public void setRads(double rads)
+	{
+		this.rads = rads;
+	}
+	public double getRads()
+	{
+		return this.rads;
+	}
+	public BufferedImage rotateImage()
+	{
+		return null;
 	}
 }

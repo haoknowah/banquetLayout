@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -44,14 +45,15 @@ public class Screen extends JPanel implements Serializable{
 	public Screen()
 	{
 		enableEvents(
-	            AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
+	            AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.KEY_EVENT_MASK
+	            | AWTEvent.MOUSE_WHEEL_EVENT_MASK);
 		objects = new ArrayList<Item>();
 		setFocusable(true);
 		requestFocusInWindow();
 		try
 		{
 			JFileChooser find = new JFileChooser();
-			find.setCurrentDirectory(new File(System.getProperty("user.dir")));
+			find.setCurrentDirectory(new File(System.getProperty("user.dir") + "/room"));
 			find.showOpenDialog(find);
 			File backFile = find.getSelectedFile();
 			FileInputStream fi = new FileInputStream(backFile);
@@ -81,7 +83,8 @@ public class Screen extends JPanel implements Serializable{
 	public Screen(double scale, ByteArrayInputStream bi)
 	{
 		enableEvents(
-	            AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
+	            AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.KEY_EVENT_MASK
+	            | AWTEvent.MOUSE_WHEEL_EVENT_MASK);
 		objects = new ArrayList<Item>();
 		setFocusable(true);
 		requestFocusInWindow();
@@ -107,7 +110,14 @@ public class Screen extends JPanel implements Serializable{
 		for(Item i : objects)
 		{
 			BufferedImage img = i.getImg();
-			g.drawImage(img, i.getLocation().x, i.getLocation().y, this);
+			if(i.getRads() != 0)
+			{
+				
+			}
+			else
+			{
+				g.drawImage(img, i.getLocation().x, i.getLocation().y, this);
+			}
 		}
 	}
 	public void addObject(Item item)
@@ -206,6 +216,26 @@ public class Screen extends JPanel implements Serializable{
 			event.consume();
 		}
 		super.processMouseMotionEvent(event);
+	}
+	@Override
+	protected void processMouseWheelEvent(MouseWheelEvent event)
+	{
+		int rotate = event.getScrollAmount();
+		Point location = event.getPoint();
+		try
+		{
+			Optional<Item> item = this.itemAtPoint(location);
+			if(item.isPresent())
+			{
+				selectedItem = item.get();
+				
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		super.processMouseWheelEvent(event);
 	}
 	public List<Item> getObjects()
 	{
