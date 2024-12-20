@@ -205,7 +205,7 @@ public class Item implements Serializable{
 			this.degrees = this.degrees%360;
 		}
 		//System.out.println(this.degrees);
-		setImg();
+		//setImg();
 		//rotateImage();
 	}
 	public void setdegrees(double degrees)

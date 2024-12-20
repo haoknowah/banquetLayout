@@ -3,6 +3,7 @@ package ui;
 import java.awt.AWTEvent;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
@@ -110,6 +111,11 @@ public class Screen extends JPanel implements Serializable{
 		for(Item i : objects)
 		{
 			BufferedImage img = i.getImg();
+			if(i.getDegrees() != 0)
+			{
+				((Graphics2D) g).rotate(Math.toRadians(i.getDegrees()), img.getWidth()/2 + i.getLocation().x, img.getHeight()/2
+						+ i.getLocation().y);
+			}
 			g.drawImage(img, i.getLocation().x, i.getLocation().y, this);
 		}
 	}
