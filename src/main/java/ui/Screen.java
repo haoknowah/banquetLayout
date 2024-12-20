@@ -3,11 +3,9 @@ package ui;
 import java.awt.AWTEvent;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -215,7 +213,7 @@ public class Screen extends JPanel implements Serializable{
 	@Override
 	protected void processMouseWheelEvent(MouseWheelEvent event)
 	{
-		int rotate = event.getScrollAmount();
+		int rotate = event.getWheelRotation();
 		Point location = event.getPoint();
 		try
 		{
@@ -223,7 +221,14 @@ public class Screen extends JPanel implements Serializable{
 			if(item.isPresent())
 			{
 				selectedItem = item.get();
-				selectedItem.addDegrees(rotate);
+				if(rotate < 0)
+				{
+					selectedItem.addDegrees(-45);
+				}
+				if(rotate > 0)
+				{
+					selectedItem.addDegrees(45);
+				}
 				revalidate();
 				repaint();
 			}

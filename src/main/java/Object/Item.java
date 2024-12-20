@@ -145,6 +145,7 @@ public class Item implements Serializable{
 			{
 				icon = new BufferedImage((int) width, (int) height, BufferedImage.TYPE_INT_RGB);
 				Graphics2D g = icon.createGraphics();
+				System.out.println(this.width + " " + this.height);
 				g.setColor(Color.yellow);
 				g.fillRect(0, 0, (int) this.width-1, (int) this.height-1);
 				g.setColor(Color.BLACK);
@@ -153,14 +154,15 @@ public class Item implements Serializable{
 			}
 			else
 			{
-	            double sin = Math.abs(Math.sin(degrees)), cos = Math.abs(Math.cos(degrees));
+	            double sin = Math.abs(Math.sin(Math.toRadians(degrees))), cos = Math.abs(Math.cos(Math.toRadians(degrees)));
 	            double newWidth = Math.floor(width * cos + height * sin);
 	            double newHeight = Math.floor(height * cos + width * sin);
+	            System.out.println(newWidth + " " + newHeight);
 	            icon = new BufferedImage((int) newWidth, (int) newHeight, BufferedImage.TYPE_INT_ARGB);
 	            Graphics2D g = icon.createGraphics();
 	            AffineTransform afflac = new AffineTransform();
 	            afflac.translate((newWidth - width)/2, (newHeight - height)/2);
-	            afflac.rotate(degrees, width/2, height/2);
+	            afflac.rotate(Math.toRadians(this.degrees), width/2, height/2);
 	            g.setTransform(afflac);
 	            g.setColor(Color.yellow);
 	            g.fillRect(0, 0, (int) this.width - 1, (int) this.height - 1);
@@ -193,8 +195,18 @@ public class Item implements Serializable{
 	public void addDegrees(double degrees)
 	{
 		//change to set degree increments
-		this.degrees += Math.toDegrees(degrees);
+		this.degrees += degrees;
+		if(this.degrees < 0)
+		{
+			this.degrees = 360 + this.degrees;
+		}
+		if(this.degrees >= 360)
+		{
+			this.degrees = this.degrees%360;
+		}
+		//System.out.println(this.degrees);
 		setImg();
+		//rotateImage();
 	}
 	public void setdegrees(double degrees)
 	{
@@ -204,9 +216,20 @@ public class Item implements Serializable{
 	{
 		return this.degrees;
 	}
-	public BufferedImage rotateImage()
+	public void rotateImage()
 	{
-		
-		return null;
+		double sin = Math.abs(Math.sin(Math.toRadians(degrees))), cos = Math.abs(Math.cos(Math.toRadians(degrees)));
+        double newWidth = Math.floor(width * cos + height * sin);
+        double newHeight = Math.floor(height * cos + width * sin);
+        System.out.println(newWidth + " " + newHeight);
+        BufferedImage icon = new BufferedImage((int) newWidth, (int) newHeight, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = icon.createGraphics();
+        AffineTransform afflac = new AffineTransform();
+        afflac.translate((newWidth - width)/2, (newHeight - height)/2);
+        afflac.rotate(Math.toRadians(this.degrees), width/2, height/2);
+        g.setTransform(afflac);
+        g.drawImage(icon, 0, 0, null);
+        g.dispose();
+        this.img = icon;
 	}
 }
