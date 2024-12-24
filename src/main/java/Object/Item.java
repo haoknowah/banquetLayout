@@ -36,21 +36,38 @@ public class Item implements Serializable{
 		this.height = 0;
 		this.type = SQUARE;
 	}
-	public Item(double dheight, double width, boolean square)
+	public Item(double dheight, double width, int type)
 	{
-		if(square)
+		if(SQUARE == type)
 		{
 			this.height = dheight;
 			this.width = width;
 			this.type = SQUARE;
 			setImg();
 		}
-		else
+		else if(type == CIRCLE)
 		{
-			this.diameter = height;
+			this.diameter = dheight;
 			this.type = CIRCLE;
 			setImg();
 		}
+	}
+	public Item(double dheight, double width, int type, Point point)
+	{
+		if(type == SQUARE)
+		{
+			this.height = dheight;
+			this.width = width;
+			this.type = SQUARE;
+			setImg();
+		}
+		else if(type == CIRCLE)
+		{
+			this.diameter = dheight;
+			this.type = CIRCLE;
+			setImg();
+		}
+		this.moveToPoint(point);
 	}
 	public Item(double heightft, double heightin, double widthft, double widthin)
 	{

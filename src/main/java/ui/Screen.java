@@ -43,6 +43,7 @@ public class Screen extends JPanel implements Serializable{
 	private Point relativeLocation;
 	private double scale;
 	private PopupMenu popup;
+	private Item copy = null;
 	public Screen()
 	{
 		enableEvents(
@@ -268,5 +269,13 @@ public class Screen extends JPanel implements Serializable{
 	public void setScale(int scale)
 	{
 		this.scale = (double) (1/scale);
+	}
+	public void setCopy(Item item)
+	{
+		this.copy = item;
+	}
+	public Item getCopy()
+	{
+		return this.copy;
 	}
 }

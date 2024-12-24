@@ -433,14 +433,14 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 		cpan.add(new JLabel("IN"), con);
 		con.gridx = 2;
 		con.gridy = 2;
-		cpan.add(new JLabel("or"));
+		cpan.add(new JLabel("or"), con);
 		con.gridx = 1;
 		con.gridy = 3;
-		cpan.add(new JLabel("Circumference: "));
+		cpan.add(new JLabel("Circumference: "), con);
 		con.gridx = 2;
 		cpan.add(circum, con);
 		con.gridx = 3;
-		cpan.add(new JLabel("FT"));
+		cpan.add(new JLabel("FT"), con);
 		con.gridx = 2;
 		con.gridy = 4;
 		JButton create = new JButton("Create Item");
@@ -494,7 +494,7 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 			}
 			if(!((JTextField) com[7]).getText().equals("0"))
 			{
-				((JTextField) com[0]).setText(((JTextField) com[5]).getText());
+				((JTextField) com[0]).setText(((JTextField) com[7]).getText());
 			}
 			item = new Item(Double.parseDouble(((JTextField) com[0]).getText()), Double.parseDouble(((JTextField) com[3]).getText()));
 		}
