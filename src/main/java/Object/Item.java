@@ -33,6 +33,8 @@ public class Item implements Serializable{
 	public Item()
 	{
 		this.width = 0;
+		this.height = 0;
+		this.type = SQUARE;
 	}
 	public Item(double dheight, double width, boolean square)
 	{
@@ -145,7 +147,7 @@ public class Item implements Serializable{
 			{
 				icon = new BufferedImage((int) width, (int) height, BufferedImage.TYPE_INT_RGB);
 				Graphics2D g = icon.createGraphics();
-				System.out.println(this.width + " " + this.height);
+				//System.out.println(this.width + " " + this.height);
 				g.setColor(Color.yellow);
 				g.fillRect(0, 0, (int) this.width-1, (int) this.height-1);
 				g.setColor(Color.BLACK);
@@ -157,7 +159,7 @@ public class Item implements Serializable{
 	            double sin = Math.abs(Math.sin(Math.toRadians(degrees))), cos = Math.abs(Math.cos(Math.toRadians(degrees)));
 	            double newWidth = Math.floor(width * cos + height * sin);
 	            double newHeight = Math.floor(height * cos + width * sin);
-	            System.out.println(newWidth + " " + newHeight);
+	            //System.out.println(newWidth + " " + newHeight);
 	            icon = new BufferedImage((int) newWidth, (int) newHeight, BufferedImage.TYPE_INT_ARGB);
 	            Graphics2D g = icon.createGraphics();
 	            AffineTransform afflac = new AffineTransform();
@@ -194,7 +196,6 @@ public class Item implements Serializable{
 	}
 	public void addDegrees(double degrees)
 	{
-		//change to set degree increments
 		this.degrees += degrees;
 		if(this.degrees < 0)
 		{
@@ -205,8 +206,6 @@ public class Item implements Serializable{
 			this.degrees = this.degrees%360;
 		}
 		//System.out.println(this.degrees);
-		//setImg();
-		//rotateImage();
 	}
 	public void setdegrees(double degrees)
 	{
@@ -221,7 +220,7 @@ public class Item implements Serializable{
 		double sin = Math.abs(Math.sin(Math.toRadians(degrees))), cos = Math.abs(Math.cos(Math.toRadians(degrees)));
         double newWidth = Math.floor(width * cos + height * sin);
         double newHeight = Math.floor(height * cos + width * sin);
-        System.out.println(newWidth + " " + newHeight);
+        //System.out.println(newWidth + " " + newHeight);
         BufferedImage icon = new BufferedImage((int) newWidth, (int) newHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = icon.createGraphics();
         AffineTransform afflac = new AffineTransform();

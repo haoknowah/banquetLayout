@@ -74,6 +74,9 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 		menuItem = new JMenuItem("New Room");
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
+		menuItem = new JMenuItem("Instructions");
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
 		
 		//2nd menu
 		menu = new JMenu("Add");
@@ -161,6 +164,9 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 				break;
 			case "Create Room":
 				Save.newRoom((double) (1 / ((double) Integer.parseInt(scale.getText()) * 12)));
+				break;
+			case "Instructions":
+				Save.getInstructions();
 				break;
 			case "Load":
 				if(this.screen != null)
@@ -413,6 +419,7 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 		cpan.setLayout(new GridBagLayout());
 		JTextField cft = new JTextField(5);
 		JTextField cin = new JTextField(5);
+		JTextField circum = new JTextField(5);
 		con.gridx = 1;
 		con.gridy = 1;
 		cpan.add(cft, con);
@@ -426,6 +433,16 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 		cpan.add(new JLabel("IN"), con);
 		con.gridx = 2;
 		con.gridy = 2;
+		cpan.add(new JLabel("or"));
+		con.gridx = 1;
+		con.gridy = 3;
+		cpan.add(new JLabel("Circumference: "));
+		con.gridx = 2;
+		cpan.add(circum, con);
+		con.gridx = 3;
+		cpan.add(new JLabel("FT"));
+		con.gridx = 2;
+		con.gridy = 4;
 		JButton create = new JButton("Create Item");
 		create.addActionListener(this);
 		create.addActionListener(c -> {yub.dispose();});
@@ -470,6 +487,14 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 			if(((JTextField) com[3]).getText().equals(""))
 			{
 				((JTextField) com[3]).setText("0");
+			}
+			if(((JTextField) com[7]).getText().equals(""))
+			{
+				((JTextField) com[7]).setText("0");
+			}
+			if(!((JTextField) com[7]).getText().equals("0"))
+			{
+				((JTextField) com[0]).setText(((JTextField) com[5]).getText());
 			}
 			item = new Item(Double.parseDouble(((JTextField) com[0]).getText()), Double.parseDouble(((JTextField) com[3]).getText()));
 		}

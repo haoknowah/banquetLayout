@@ -44,7 +44,6 @@ public class ItemActionListener implements ActionListener, MenuListener{
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		Item item = null;
 		if(isSquare)
 		{
@@ -62,7 +61,6 @@ public class ItemActionListener implements ActionListener, MenuListener{
 	}
 	@Override
 	public void menuSelected(MenuEvent e) {
-		// TODO Auto-generated method stub
 		if(((JMenu) e.getSource()).getName().equalsIgnoreCase("square"))
 		{
 			isSquare = true;

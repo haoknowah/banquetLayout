@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
@@ -11,6 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,10 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import Object.Item;
 import Object.Prefab;
@@ -496,6 +500,86 @@ public class Save{
 			f.pack();
 			f.setVisible(true);
 			f.setLocationRelativeTo(null);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	public static void getInstructions()
+	{
+		BufferedReader reader;
+		try
+		{
+			reader = new BufferedReader(new FileReader(new File(System.getProperty("user.dir") + "/instructions.txt")));
+		}
+		catch(FileNotFoundException e)
+		{
+			e.printStackTrace();
+			File file = new File(System.getProperty("user.dir") + "/instructions.txt");
+			try {
+				file.createNewFile();
+				Writer write = new FileWriter(file);
+				String line = "Mouse Controls: \n"
+						+ "	Left click to drag object \n"
+						+ "	Right click to bring up option to delete object \n"
+						+ "	Scroll wheel on object to rotate it \n"
+						+ "File Options: \n"
+						+ "	New = Select a room file and load it to screen. \n"
+						+ "	Save = Saves current room and layout to be loaded later for \n"
+						+ "		future modifications. \n"
+						+ "	Load = Loads a previously saved room and objects to screen. \n"
+						+ "	Publish = Creates PNG image of current layout on screen for \n"
+						+ "		displaying or sending to others."
+						+ "	New Room = Allows user to create new room file by inputting \n"
+						+ "		room width in feet for scaling and selecting PNG of room \n"
+						+ "		layout for background. \n"
+						+ "	Instructions = Creates this window. \n"
+						+ "Add Options: \n"
+						+ "	New Item = Allows user to fill parameters for new square or \n"
+						+ "		round object that can either be directly inserted into \n"
+						+ "		room or saved as a premade object for quicker future \n"
+						+ "		use. \n"
+						+ "	Remove Item from List = Allows for the removal of a premade \n"
+						+ "		object from the saved lists. \n"
+						+ "	Square = Contains all premade square objects. \n"
+						+ "	Round = Contains all premade round objects. \n"
+						+ "Prefab Options: \n"
+						+ "	New = Opens prefab window to create prefab object sets. \n"
+						+ "	Load = Allows a prefab to be loaded to current screen. \n"
+						+ "	Edit Existing = Opens prefab window with selected prefab \n"
+						+ "		on it to be edited. \n";
+				char [] letters = line.toCharArray();
+				for(int i = 0; i < letters.length; i++)
+				{
+					write.append(letters[i]);
+				}
+				write.flush();
+				write.close();
+				reader = new BufferedReader(new FileReader(file));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				reader = null;
+			}
+		}
+		try
+		{
+			String line = reader.readLine();
+			JFrame f = new JFrame("Instructions");
+			JPanel yub = new JPanel();
+			yub.setLayout(new BoxLayout(yub, BoxLayout.Y_AXIS));
+			f.add(yub);
+			while(line != null)
+			{
+				JLabel label = new JLabel(line);
+				yub.add(label);
+				line = reader.readLine();
+			}
+			reader.close();
+			f.pack();
+			f.setLocationRelativeTo(null);
+			f.setVisible(true);
 		}
 		catch(Exception e)
 		{

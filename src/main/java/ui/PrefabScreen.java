@@ -6,16 +6,17 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import Object.Item;
 import Object.Prefab;
 
-public class PrefabScreen extends JPanel{
+public class PrefabScreen extends Screen implements Serializable{
 
 	/**
 	 * 
@@ -24,7 +25,7 @@ public class PrefabScreen extends JPanel{
 	private Item selectedItem;
 	private Point relativeLocation;
 	private List<Item> objects;
-
+	private PopupMenu popup;
 	public PrefabScreen()
 	{
 		enableEvents(
@@ -72,13 +73,13 @@ public class PrefabScreen extends JPanel{
 	@Override
 	protected void processMouseEvent(MouseEvent event)
 	{
+		Point location = event.getPoint();
 		if(event.getButton() == MouseEvent.BUTTON1)
 		{
 			int id = event.getID();
 			switch(id)
 			{
 				case MouseEvent.MOUSE_PRESSED:
-					Point location = event.getPoint();
 					Optional<Item> clicked = itemAtPoint(location);
 					if(clicked.isPresent())
 					{
@@ -95,6 +96,11 @@ public class PrefabScreen extends JPanel{
 				default:
 					break;
 			}
+		}
+		else if(SwingUtilities.isRightMouseButton(event) && MouseEvent.MOUSE_PRESSED == event.getID())
+		{
+			popup = new PopupMenu(location, this);
+			popup.show(event.getComponent(), event.getX(), event.getY());
 		}
 		super.processMouseEvent(event);
 	}

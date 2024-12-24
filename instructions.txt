@@ -1,0 +1,28 @@
+Mouse Controls: 
+	Left click to drag object 
+	Right click to bring up option to delete object 
+	Scroll wheel on object to rotate it 
+File Options: 
+	New = Select a room file and load it to screen. 
+	Save = Saves current room and layout to be loaded later for 
+		future modifications. 
+	Load = Loads a previously saved room and objects to screen. 
+	Publish = Creates PNG image of current layout on screen for 
+		displaying or sending to others.	New Room = Allows user to create new room file by inputting 
+		room width in feet for scaling and selecting PNG of room 
+		layout for background. 
+	Instructions = Creates this window. 
+Add Options: 
+	New Item = Allows user to fill parameters for new square or 
+		round object that can either be directly inserted into 
+		room or saved as a premade object for quicker future 
+		use. 
+	Remove Item from List = Allows for the removal of a premade 
+		object from the saved lists. 
+	Square = Contains all premade square objects. 
+	Round = Contains all premade round objects. 
+Prefab Options: 
+	New = Opens prefab window to create prefab object sets. 
+	Load = Allows a prefab to be loaded to current screen. 
+	Edit Existing = Opens prefab window with selected prefab 
+		on it to be edited. 
