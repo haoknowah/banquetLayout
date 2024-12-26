@@ -494,7 +494,8 @@ public class Menu extends JPanel implements ActionListener, ItemListener{
 			}
 			if(!((JTextField) com[7]).getText().equals("0"))
 			{
-				((JTextField) com[0]).setText(((JTextField) com[7]).getText());
+				double circ = Double.parseDouble(((JTextField) com[7]).getText()) * 12 * Math.PI;
+				((JTextField) com[0]).setText(String.valueOf(circ));
 			}
 			item = new Item(Double.parseDouble(((JTextField) com[0]).getText()), Double.parseDouble(((JTextField) com[3]).getText()));
 		}

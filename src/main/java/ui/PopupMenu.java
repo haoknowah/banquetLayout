@@ -19,12 +19,14 @@ public class PopupMenu extends JPopupMenu implements ActionListener{
 	private JMenuItem item;
 	private Point location;
 	private Screen screen;
+	private double scale;
 	public PopupMenu(Point p, Screen screen)
 	{
 		item = new JMenuItem("Delete");
 		item.addActionListener(this);
 		location = p;
 		this.screen = screen;
+		scale = screen.getScale();
 		add(item);
 		item = new JMenuItem("Copy");
 		item.addActionListener(this);
@@ -51,6 +53,7 @@ public class PopupMenu extends JPopupMenu implements ActionListener{
 				if(clicked.isPresent())
 				{
 					Item selectedItem = clicked.get();
+					screen.setCopy(null);
 					screen.setCopy(selectedItem);
 				}
 				break;
@@ -58,11 +61,11 @@ public class PopupMenu extends JPopupMenu implements ActionListener{
 				Item item = null;
 				if(screen.getCopy().getType() == Item.SQUARE)
 				{
-					item = new Item(screen.getCopy().getItemWidth(), screen.getCopy().getItemHeight(), Item.SQUARE, location);
+					item = new Item(screen.getCopy().getItemHeight()/scale, screen.getCopy().getItemWidth()/scale, Item.SQUARE, location);
 				}
 				else if(screen.getCopy().getType() == Item.CIRCLE)
 				{
-					item = new Item(screen.getCopy().getDiameter(), 0, Item.CIRCLE, location);
+					item = new Item(screen.getCopy().getDiameter()/scale, 0, Item.CIRCLE, location);
 				}
 				screen.addObject(item);
 				break;
