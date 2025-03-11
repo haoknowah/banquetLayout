@@ -118,6 +118,11 @@ public class Screen extends JPanel implements Serializable{
 						+ i.getLocation().y);
 			}
 			g.drawImage(img, i.getLocation().x, i.getLocation().y, this);
+			if(i.getDegrees() != 0)
+			{
+				((Graphics2D) g).rotate(-Math.toRadians(i.getDegrees()), img.getWidth()/2 + i.getLocation().x, img.getHeight()/2
+						+ i.getLocation().y);
+			}
 		}
 	}
 	public void addObject(Item item)
@@ -224,7 +229,7 @@ public class Screen extends JPanel implements Serializable{
 		Point location = event.getPoint();
 		try
 		{
-			Optional<Item> item = this.itemAtPoint(location);
+			Optional<Item> item = itemAtPoint(location);
 			if(item.isPresent())
 			{
 				selectedItem = item.get();
